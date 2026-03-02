@@ -63,7 +63,6 @@ Item {
                 anchors.fill: parent
 
                 function onWheel(event: WheelEvent): void {
-                    // Prevent tab switching during initial opening animation to avoid blank pages
                     if (!panes.initialOpeningComplete) {
                         return;
                     }
@@ -81,6 +80,16 @@ Item {
                 screen: root.screen
                 session: root.session
                 initialOpeningComplete: root.initialOpeningComplete
+            }
+
+            Rectangle {
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.topMargin: Appearance.padding.xl
+                anchors.bottomMargin: Appearance.padding.xl
+                width: 1
+                color: Qt.alpha(Colours.palette.m3outlineVariant, 0.3)
             }
         }
 

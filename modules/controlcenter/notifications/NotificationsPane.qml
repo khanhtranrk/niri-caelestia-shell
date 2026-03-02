@@ -20,10 +20,13 @@ Item {
 
     property bool expire: Config.notifs.expire ?? true
     property int defaultExpireTimeout: Config.notifs.defaultExpireTimeout ?? 5000
-    property real clearThreshold: Config.notifs.clearThreshold ?? 0.5
-    property bool actionOnClick: Config.notifs.actionOnClick ?? true
+    property real clearThreshold: Config.notifs.clearThreshold ?? 0.3
+    property bool actionOnClick: Config.notifs.actionOnClick ?? false
     property int groupPreviewNum: Config.notifs.groupPreviewNum ?? 3
-    property int expandThreshold: Config.notifs.expandThreshold ?? 40
+    property int expandThreshold: Config.notifs.expandThreshold ?? 20
+    property int popupWidth: Config.notifs.sizes.width ?? 400
+    property int imageSize: Config.notifs.sizes.image ?? 41
+    property int badgeSize: Config.notifs.sizes.badge ?? 20
 
     anchors.fill: parent
 
@@ -34,6 +37,9 @@ Item {
         Config.notifs.actionOnClick = root.actionOnClick;
         Config.notifs.groupPreviewNum = root.groupPreviewNum;
         Config.notifs.expandThreshold = root.expandThreshold;
+        Config.notifs.sizes.width = root.popupWidth;
+        Config.notifs.sizes.image = root.imageSize;
+        Config.notifs.sizes.badge = root.badgeSize;
         Config.save();
     }
 
@@ -221,6 +227,63 @@ Item {
 
                             onValueModified: newValue => {
                                 root.groupPreviewNum = Math.round(newValue);
+                                root.saveConfig();
+                            }
+                        }
+
+                        SliderInput {
+                            Layout.fillWidth: true
+
+                            label: qsTr("Popup width")
+                            value: root.popupWidth
+                            from: 200
+                            to: 800
+                            stepSize: 25
+                            suffix: "px"
+                            validator: IntValidator { bottom: 200; top: 800 }
+                            formatValueFunction: val => Math.round(val).toString()
+                            parseValueFunction: text => parseInt(text)
+
+                            onValueModified: newValue => {
+                                root.popupWidth = Math.round(newValue);
+                                root.saveConfig();
+                            }
+                        }
+
+                        SliderInput {
+                            Layout.fillWidth: true
+
+                            label: qsTr("Image size")
+                            value: root.imageSize
+                            from: 16
+                            to: 96
+                            stepSize: 1
+                            suffix: "px"
+                            validator: IntValidator { bottom: 16; top: 96 }
+                            formatValueFunction: val => Math.round(val).toString()
+                            parseValueFunction: text => parseInt(text)
+
+                            onValueModified: newValue => {
+                                root.imageSize = Math.round(newValue);
+                                root.saveConfig();
+                            }
+                        }
+
+                        SliderInput {
+                            Layout.fillWidth: true
+
+                            label: qsTr("Badge size")
+                            value: root.badgeSize
+                            from: 10
+                            to: 48
+                            stepSize: 1
+                            suffix: "px"
+                            validator: IntValidator { bottom: 10; top: 48 }
+                            formatValueFunction: val => Math.round(val).toString()
+                            parseValueFunction: text => parseInt(text)
+
+                            onValueModified: newValue => {
+                                root.badgeSize = Math.round(newValue);
                                 root.saveConfig();
                             }
                         }

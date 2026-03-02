@@ -19,9 +19,11 @@ Item {
     required property Session session
 
     property bool enabled: Config.osd.enabled ?? true
-    property int hideDelay: Config.osd.hideDelay ?? 1500
+    property int hideDelay: Config.osd.hideDelay ?? 2000
     property bool enableBrightness: Config.osd.enableBrightness ?? true
-    property bool enableMicrophone: Config.osd.enableMicrophone ?? true
+    property bool enableMicrophone: Config.osd.enableMicrophone ?? false
+    property int sliderWidth: Config.osd.sizes.sliderWidth ?? 30
+    property int sliderHeight: Config.osd.sizes.sliderHeight ?? 150
 
     anchors.fill: parent
 
@@ -30,6 +32,8 @@ Item {
         Config.osd.hideDelay = root.hideDelay;
         Config.osd.enableBrightness = root.enableBrightness;
         Config.osd.enableMicrophone = root.enableMicrophone;
+        Config.osd.sizes.sliderWidth = root.sliderWidth;
+        Config.osd.sizes.sliderHeight = root.sliderHeight;
         Config.save();
     }
 
@@ -155,6 +159,58 @@ Item {
                         onToggled: checked => {
                             root.enableMicrophone = checked;
                             root.saveConfig();
+                        }
+                    }
+                }
+
+                // Sizing Section
+                SectionContainer {
+                    alignTop: true
+
+                    StyledText {
+                        text: qsTr("Sizing")
+                        font.pointSize: Appearance.font.size.bodyMedium
+                    }
+
+                    SectionContainer {
+                        contentSpacing: Appearance.spacing.lg
+
+                        SliderInput {
+                            Layout.fillWidth: true
+
+                            label: qsTr("Slider width")
+                            value: root.sliderWidth
+                            from: 15
+                            to: 60
+                            stepSize: 1
+                            suffix: "px"
+                            validator: IntValidator { bottom: 15; top: 60 }
+                            formatValueFunction: val => Math.round(val).toString()
+                            parseValueFunction: text => parseInt(text)
+
+                            onValueModified: newValue => {
+                                root.sliderWidth = Math.round(newValue);
+                                root.saveConfig();
+                            }
+                        }
+
+                        SliderInput {
+                            Layout.fillWidth: true
+
+                            label: qsTr("Slider height")
+                            value: root.sliderHeight
+                            from: 80
+                            to: 300
+                            stepSize: 10
+                            suffix: "px"
+                            validator: IntValidator { bottom: 80; top: 300 }
+                            formatValueFunction: val => Math.round(val).toString()
+                            parseValueFunction: text => parseInt(text)
+
+                            onValueModified: newValue => {
+                                root.sliderHeight = Math.round(newValue);
+                                root.saveConfig();
+                            }
                         }
                     }
                 }

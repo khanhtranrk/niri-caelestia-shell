@@ -15,115 +15,117 @@ Item {
     required property Session session
     required property bool initialOpeningComplete
 
-    implicitWidth: layout.implicitWidth + Appearance.padding.lg * 4
-    implicitHeight: layout.implicitHeight + Appearance.padding.xl * 2
+    implicitWidth: navFlickable.implicitWidth + Appearance.padding.xl * 2
+    implicitHeight: parent ? parent.height : 400
 
-    ColumnLayout {
-        id: layout
+    Flickable {
+        id: navFlickable
 
-        anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.leftMargin: Appearance.padding.lg * 2
-        spacing: Appearance.spacing.lg
+        anchors.fill: parent
+        anchors.leftMargin: Appearance.padding.xl
+        anchors.rightMargin: Appearance.padding.xl
+        anchors.topMargin: Appearance.padding.lg
+        anchors.bottomMargin: Appearance.padding.lg
 
-        states: State {
-            name: "expanded"
-            when: root.session.navExpanded
+        contentHeight: layout.implicitHeight
+        contentWidth: layout.implicitWidth
+        flickableDirection: Flickable.VerticalFlick
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+        implicitWidth: layout.implicitWidth
 
-            PropertyChanges {
-                layout.spacing: Appearance.spacing.sm
-            }
-        }
+        ColumnLayout {
+            id: layout
 
-        transitions: Transition {
-            Anim {
-                properties: "spacing"
-            }
-        }
+            spacing: 2
 
-        Loader {
-            Layout.topMargin: Appearance.spacing.xxl
-            active: !root.session.floating
-            visible: active
+            Loader {
+                Layout.bottomMargin: Appearance.spacing.xs
+                active: !root.session.floating
+                visible: active
 
-            sourceComponent: StyledRect {
-                readonly property int nonAnimWidth: normalWinIcon.implicitWidth + (root.session.navExpanded ? normalWinLabel.anchors.leftMargin + normalWinLabel.implicitWidth : 0) + normalWinIcon.anchors.leftMargin * 2
+                sourceComponent: StyledRect {
+                    implicitWidth: floatRow.implicitWidth + Appearance.padding.xl * 2
+                    implicitHeight: floatRow.implicitHeight + Appearance.padding.md * 2
 
-                implicitWidth: nonAnimWidth
-                implicitHeight: root.session.navExpanded ? normalWinIcon.implicitHeight + Appearance.padding.md * 2 : nonAnimWidth
+                    color: Colours.palette.m3primaryContainer
+                    radius: Appearance.rounding.small
 
-                color: Colours.palette.m3primaryContainer
-                radius: Appearance.rounding.small
+                    StateLayer {
+                        color: Colours.palette.m3onPrimaryContainer
 
-                StateLayer {
-                    id: normalWinState
-
-                    color: Colours.palette.m3onPrimaryContainer
-
-                    function onClicked(): void {
-                        root.session.root.close();
-                        WindowFactory.create(null, {
-                            active: root.session.active,
-                            navExpanded: root.session.navExpanded
-                        });
+                        function onClicked(): void {
+                            root.session.root.close();
+                            WindowFactory.create(null, {
+                                active: root.session.active,
+                                navExpanded: root.session.navExpanded
+                            });
+                        }
                     }
-                }
 
-                MaterialIcon {
-                    id: normalWinIcon
+                    RowLayout {
+                        id: floatRow
 
-                    anchors.left: parent.left
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.leftMargin: Appearance.padding.xl
+                        anchors.centerIn: parent
+                        spacing: Appearance.spacing.sm
 
-                    text: "select_window"
-                    color: Colours.palette.m3onPrimaryContainer
-                    font.pointSize: Appearance.font.size.titleMedium
-                    fill: 1
-                }
+                        MaterialIcon {
+                            text: "open_in_new"
+                            color: Colours.palette.m3onPrimaryContainer
+                            font.pointSize: Appearance.font.size.bodyLarge
+                        }
 
-                StyledText {
-                    id: normalWinLabel
-
-                    anchors.left: normalWinIcon.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.leftMargin: Appearance.spacing.lg
-
-                    text: qsTr("Float window")
-                    color: Colours.palette.m3onPrimaryContainer
-                    opacity: root.session.navExpanded ? 1 : 0
-
-                    Behavior on opacity {
-                        Anim {
-                            duration: Appearance.anim.durations.small
+                        StyledText {
+                            text: qsTr("Float window")
+                            color: Colours.palette.m3onPrimaryContainer
+                            font.pointSize: Appearance.font.size.bodySmall
                         }
                     }
                 }
+            }
 
-                Behavior on implicitWidth {
-                    Anim {
-                        duration: Appearance.anim.durations.expressiveDefaultSpatial
-                        easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-                    }
-                }
+            Loader {
+                active: !root.session.floating
+                visible: active
+                Layout.fillWidth: true
+                Layout.topMargin: Appearance.spacing.xs
+                Layout.bottomMargin: Appearance.spacing.sm
 
-                Behavior on implicitHeight {
-                    Anim {
-                        duration: Appearance.anim.durations.expressiveDefaultSpatial
-                        easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-                    }
+                sourceComponent: Rectangle {
+                    implicitHeight: 1
+                    color: Qt.alpha(Colours.palette.m3outlineVariant, 0.4)
                 }
             }
-        }
 
-        Repeater {
-            model: PaneRegistry.count
+            Repeater {
+                model: PaneRegistry.count
 
-            NavItem {
-                required property int index
-                Layout.topMargin: index === 0 ? Appearance.spacing.xxl * 2 : 0
-                icon: PaneRegistry.getByIndex(index).icon
-                label: PaneRegistry.getByIndex(index).label
+                ColumnLayout {
+                    id: navDelegate
+
+                    required property int index
+                    spacing: 0
+
+                    Loader {
+                        active: navDelegate.index > 0 && PaneRegistry.isFirstInCategory(navDelegate.index)
+                        visible: active
+                        Layout.fillWidth: true
+                        Layout.leftMargin: Appearance.padding.md
+                        Layout.rightMargin: Appearance.padding.md
+                        Layout.topMargin: Appearance.spacing.sm
+                        Layout.bottomMargin: Appearance.spacing.sm
+
+                        sourceComponent: Rectangle {
+                            implicitHeight: 1
+                            color: Qt.alpha(Colours.palette.m3outlineVariant, 0.4)
+                        }
+                    }
+
+                    NavItem {
+                        icon: PaneRegistry.getByIndex(navDelegate.index).icon
+                        label: PaneRegistry.getByIndex(navDelegate.index).label
+                    }
+                }
             }
         }
     }
@@ -136,95 +138,71 @@ Item {
         readonly property bool active: root.session.active === label
 
         implicitWidth: background.implicitWidth
-        implicitHeight: background.implicitHeight + smallLabel.implicitHeight + smallLabel.anchors.topMargin
-
-        states: State {
-            name: "expanded"
-            when: root.session.navExpanded
-
-            PropertyChanges {
-                expandedLabel.opacity: 1
-                smallLabel.opacity: 0
-                background.implicitWidth: icon.implicitWidth + icon.anchors.leftMargin * 2 + expandedLabel.anchors.leftMargin + expandedLabel.implicitWidth
-                background.implicitHeight: icon.implicitHeight + Appearance.padding.md * 2
-                item.implicitHeight: background.implicitHeight
-            }
-        }
-
-        transitions: Transition {
-            Anim {
-                property: "opacity"
-                duration: Appearance.anim.durations.small
-            }
-
-            Anim {
-                properties: "implicitWidth,implicitHeight"
-                duration: Appearance.anim.durations.expressiveDefaultSpatial
-                easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
-            }
-        }
+        implicitHeight: background.implicitHeight
 
         StyledRect {
             id: background
 
+            anchors.left: parent.left
+            anchors.right: parent.right
+
             radius: Appearance.rounding.full
             color: Qt.alpha(Colours.palette.m3secondaryContainer, item.active ? 1 : 0)
 
-            implicitWidth: icon.implicitWidth + icon.anchors.leftMargin * 2
-            implicitHeight: icon.implicitHeight + Appearance.padding.xs
+            implicitWidth: itemIcon.implicitWidth + itemIcon.anchors.leftMargin + itemLabel.anchors.leftMargin + itemLabel.implicitWidth + Appearance.padding.xl
+            implicitHeight: Math.max(itemIcon.implicitHeight, itemLabel.implicitHeight) + Appearance.padding.md * 2
+
+            Behavior on color {
+                CAnim {}
+            }
 
             StateLayer {
                 color: item.active ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
 
                 function onClicked(): void {
-                    // Prevent tab switching during initial opening animation to avoid blank pages
-                    if (!root.initialOpeningComplete) {
+                    if (!root.initialOpeningComplete)
                         return;
-                    }
                     root.session.active = item.label;
                 }
             }
 
             MaterialIcon {
-                id: icon
+                id: itemIcon
 
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.leftMargin: Appearance.padding.xl
 
                 text: item.icon
-                color: item.active ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
-                font.pointSize: Appearance.font.size.titleMedium
+                color: item.active ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurfaceVariant
+                font.pointSize: Appearance.font.size.bodyLarge
                 fill: item.active ? 1 : 0
 
                 Behavior on fill {
                     Anim {}
                 }
+
+                Behavior on color {
+                    CAnim {}
+                }
             }
 
             StyledText {
-                id: expandedLabel
+                id: itemLabel
 
-                anchors.left: icon.right
+                anchors.left: itemIcon.right
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.leftMargin: Appearance.spacing.lg
 
-                opacity: 0
                 text: item.label
-                color: item.active ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurface
+                color: item.active ? Colours.palette.m3onSecondaryContainer : Colours.palette.m3onSurfaceVariant
+                font.pointSize: Appearance.font.size.bodySmall
+                font.weight: item.active ? Font.DemiBold : Font.Normal
                 font.capitalization: Font.Capitalize
-            }
 
-            StyledText {
-                id: smallLabel
-
-                anchors.horizontalCenter: icon.horizontalCenter
-                anchors.top: icon.bottom
-                anchors.topMargin: Appearance.spacing.sm / 2
-
-                text: item.label
-                font.pointSize: Appearance.font.size.labelLarge
-                font.capitalization: Font.Capitalize
+                Behavior on color {
+                    CAnim {}
+                }
             }
         }
     }

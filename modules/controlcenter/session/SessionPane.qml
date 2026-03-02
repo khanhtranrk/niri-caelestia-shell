@@ -19,8 +19,9 @@ Item {
     required property Session session
 
     property bool enabled: Config.session.enabled ?? true
-    property bool vimKeybinds: Config.session.vimKeybinds ?? true
-    property int dragThreshold: Config.session.dragThreshold ?? 50
+    property bool vimKeybinds: Config.session.vimKeybinds ?? false
+    property int dragThreshold: Config.session.dragThreshold ?? 30
+    property int buttonSize: Config.session.sizes.button ?? 80
 
     anchors.fill: parent
 
@@ -28,6 +29,7 @@ Item {
         Config.session.enabled = root.enabled;
         Config.session.vimKeybinds = root.vimKeybinds;
         Config.session.dragThreshold = root.dragThreshold;
+        Config.session.sizes.button = root.buttonSize;
         Config.save();
     }
 
@@ -131,6 +133,39 @@ Item {
 
                             onValueModified: newValue => {
                                 root.dragThreshold = Math.round(newValue);
+                                root.saveConfig();
+                            }
+                        }
+                    }
+                }
+
+                // Sizing Section
+                SectionContainer {
+                    alignTop: true
+
+                    StyledText {
+                        text: qsTr("Sizing")
+                        font.pointSize: Appearance.font.size.bodyMedium
+                    }
+
+                    SectionContainer {
+                        contentSpacing: Appearance.spacing.lg
+
+                        SliderInput {
+                            Layout.fillWidth: true
+
+                            label: qsTr("Button size")
+                            value: root.buttonSize
+                            from: 40
+                            to: 160
+                            stepSize: 5
+                            suffix: "px"
+                            validator: IntValidator { bottom: 40; top: 160 }
+                            formatValueFunction: val => Math.round(val).toString()
+                            parseValueFunction: text => parseInt(text)
+
+                            onValueModified: newValue => {
+                                root.buttonSize = Math.round(newValue);
                                 root.saveConfig();
                             }
                         }

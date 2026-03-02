@@ -23,6 +23,8 @@ Item {
     property bool enableFprint: Config.lock.enableFprint ?? true
     property int maxFprintTries: Config.lock.maxFprintTries ?? 3
     property int centerWidth: Config.lock.sizes.centerWidth ?? 600
+    property real heightMult: Config.lock.sizes.heightMult ?? 0.7
+    property real ratio: Config.lock.sizes.ratio ?? (16 / 9)
 
     anchors.fill: parent
 
@@ -32,6 +34,8 @@ Item {
         Config.lock.enableFprint = root.enableFprint;
         Config.lock.maxFprintTries = root.maxFprintTries;
         Config.lock.sizes.centerWidth = root.centerWidth;
+        Config.lock.sizes.heightMult = root.heightMult;
+        Config.lock.sizes.ratio = root.ratio;
         Config.save();
     }
 
@@ -187,6 +191,40 @@ Item {
 
                             onValueModified: newValue => {
                                 root.centerWidth = Math.round(newValue);
+                                root.saveConfig();
+                            }
+                        }
+
+                        SliderInput {
+                            Layout.fillWidth: true
+
+                            label: qsTr("Height scale")
+                            value: root.heightMult
+                            from: 0.3
+                            to: 1.0
+                            stepSize: 0.05
+                            decimals: 2
+                            validator: DoubleValidator { bottom: 0.3; top: 1.0; decimals: 2 }
+
+                            onValueModified: newValue => {
+                                root.heightMult = newValue;
+                                root.saveConfig();
+                            }
+                        }
+
+                        SliderInput {
+                            Layout.fillWidth: true
+
+                            label: qsTr("Aspect ratio")
+                            value: root.ratio
+                            from: 1.0
+                            to: 2.5
+                            stepSize: 0.1
+                            decimals: 1
+                            validator: DoubleValidator { bottom: 1.0; top: 2.5; decimals: 1 }
+
+                            onValueModified: newValue => {
+                                root.ratio = newValue;
                                 root.saveConfig();
                             }
                         }
