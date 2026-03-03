@@ -23,6 +23,8 @@ Item {
     property bool expandable: true
     property bool expanded: true
 
+    signal cleared
+
     readonly property real desiredContentHeight: headerRow.implicitHeight + column.spacing + notifList.contentHeight + notifList.spacing * Math.max(0, Notifs.list.length - 1)
 
     implicitHeight: column.implicitHeight
@@ -94,8 +96,10 @@ Item {
                     color: Colours.palette.m3error
 
                     function onClicked(): void {
-                        for (const notif of Notifs.list)
+                        const all = [...Notifs.list];
+                        for (const notif of all)
                             notif.notification.dismiss();
+                        root.cleared();
                     }
                 }
 

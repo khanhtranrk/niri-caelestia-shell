@@ -51,6 +51,28 @@ Item {
                 ? collapsedHeight + 120
                 : Math.max(collapsedHeight + 120, Math.min(desiredHeight, screenHalfHeight))
 
+            // Tracks whether the user manually collapsed the panel while notifications exist.
+            // Reset to false when the notification list empties, so the next incoming
+            // notification triggers an auto-expand again.
+            property bool userCollapsed: false
+            property int notifCount: Notifs.list.length
+
+            onNotifCountChanged: {
+                if (notifCount === 0) {
+                    userCollapsed = false;
+                    root.visibilities.notifsExpanded = false;
+                    notifListWidget.expanded = false;
+                } else if (!userCollapsed) {
+                    root.visibilities.notifsExpanded = true;
+                    notifListWidget.expanded = true;
+                }
+            }
+
+            Component.onCompleted: {
+                if (Notifs.list.length > 0)
+                    root.visibilities.notifsExpanded = true;
+            }
+
             Behavior on Layout.preferredHeight {
                 Anim {
                     duration: Appearance.anim.durations.normal
@@ -69,6 +91,15 @@ Item {
                     target: notifListWidget
                     function onExpandedChanged(): void {
                         root.visibilities.notifsExpanded = notifListWidget.expanded;
+                        if (!notifListWidget.expanded && Notifs.list.length > 0)
+                            notifSection.userCollapsed = true;
+                        else if (notifListWidget.expanded)
+                            notifSection.userCollapsed = false;
+                    }
+                    function onCleared(): void {
+                        notifSection.userCollapsed = false;
+                        root.visibilities.notifsExpanded = false;
+                        notifListWidget.expanded = false;
                     }
                 }
             }
