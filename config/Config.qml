@@ -280,7 +280,7 @@ Singleton {
             actionPrefix: launcher.actionPrefix,
             enableDangerousActions: launcher.enableDangerousActions,
             dragThreshold: launcher.dragThreshold,
-            vimKeybinds: launcher.vimKeybinds,
+            // ...existing code...
             favouriteApps: launcher.favouriteApps,
             hiddenApps: launcher.hiddenApps,
             useFuzzy: {
@@ -332,7 +332,7 @@ Singleton {
         return {
             enabled: session.enabled,
             dragThreshold: session.dragThreshold,
-            vimKeybinds: session.vimKeybinds,
+            // ...existing code...
             commands: {
                 logout: session.commands.logout,
                 shutdown: session.commands.shutdown,

@@ -168,7 +168,7 @@ Item {
             Keys.onEscapePressed: root.visibilities.launcher = false
 
             Keys.onPressed: event => {
-                if (!Config.launcher.vimKeybinds)
+                // ...existing code...
                     return;
 
                 if (event.modifiers & Qt.ControlModifier) {

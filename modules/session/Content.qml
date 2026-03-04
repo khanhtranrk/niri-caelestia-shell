@@ -99,7 +99,7 @@ Column {
         Keys.onReturnPressed: Quickshell.execDetached(button.command)
         Keys.onEscapePressed: root.visibilities.session = false
         Keys.onPressed: event => {
-            if (!Config.session.vimKeybinds)
+            // ...existing code...
                 return;
 
             if (event.modifiers & Qt.ControlModifier) {

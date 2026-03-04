@@ -26,7 +26,7 @@ ColumnLayout {
         spacing: Appearance.spacing.sm
 
         MaterialIcon {
-            text: "terminal"
+            text: "chevron_right"
             font.pointSize: Appearance.font.size.bodyMedium
             color: Colours.palette.m3onSurfaceVariant
         }

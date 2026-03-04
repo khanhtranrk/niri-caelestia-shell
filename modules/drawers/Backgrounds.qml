@@ -9,7 +9,6 @@ import qs.modules.bar.popouts as BarPopouts
 import qs.modules.utilities as Utilities
 import qs.modules.clipboard as Clipboard
 import qs.modules.quicktoggles as QuickToggles
-import qs.modules.keybinds as KeybindsModule
 import QtQuick
 import QtQuick.Shapes
 
@@ -83,13 +82,6 @@ Shape {
 
     QuickToggles.QuickTogglesBackground {
         wrapper: root.panels.quicktoggles
-
-        startX: root.width
-        startY: root.height
-    }
-
-    KeybindsModule.KeybindsBackground {
-        wrapper: root.panels.keybinds
 
         startX: root.width
         startY: root.height

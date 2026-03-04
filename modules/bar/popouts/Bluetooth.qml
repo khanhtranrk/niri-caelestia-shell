@@ -188,7 +188,7 @@ ColumnLayout {
 
             StyledText {
                 Layout.leftMargin: Appearance.padding.sm
-                text: qsTr("Open panel")
+                text: qsTr("Settings")
                 color: Colours.palette.m3onPrimaryContainer
             }
 

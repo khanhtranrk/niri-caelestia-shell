@@ -9,7 +9,6 @@ import qs.modules.utilities as Utilities
 import qs.modules.utilities.toasts as Toasts
 import qs.modules.clipboard as Clipboard
 import qs.modules.quicktoggles as QuickToggles
-import qs.modules.keybinds as KeybindsModule
 import Quickshell
 import QtQuick
 
@@ -29,7 +28,6 @@ Item {
     readonly property Utilities.Wrapper utilities: utilities
     readonly property Clipboard.Wrapper clipboard: clipboard
     readonly property QuickToggles.Wrapper quicktoggles: quicktoggles
-    readonly property KeybindsModule.Wrapper keybinds: keybinds
 
     anchors.fill: parent
     anchors.margins: Config.border.thickness
@@ -123,15 +121,6 @@ Item {
 
     QuickToggles.Wrapper {
         id: quicktoggles
-
-        visibilities: root.visibilities
-
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-    }
-
-    KeybindsModule.Wrapper {
-        id: keybinds
 
         visibilities: root.visibilities
 

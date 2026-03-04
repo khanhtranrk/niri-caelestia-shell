@@ -54,7 +54,7 @@ Based on [jutraim's niri-caelestia-shell](https://github.com/jutraim/niri-caeles
 - **Enhanced Workspace Bar**: Program icons, drag-to-reorder windows, context menus, app grouping
 - **System Monitor**: Real-time CPU/GPU/Memory stats (AMD/NVIDIA, no Intel yet)
 - **Niri Integration**: Dashboard controls for Niri IPC commands
-- **Keybinds Search**: Searchable keybind viewer for quick shortcut reference
+// ...existing code...
 - **Clipboard Manager**: History-based clipboard with search and management
 
 All built on top of the Niri window manager adaptation from the upstream fork.
@@ -172,7 +172,7 @@ The shell can be started via the `qs -c niri-caelestia-shell` on your preferred 
 
 ### Custom Shortcuts/IPC
 
-All keybinds are accessible via [Quickshell IPC msg](https://quickshell.org/docs/v0.1.0/types/Quickshell.Io/IpcHandler/).
+// ...existing code...
 
 All IPC commands can be called via `quickshell -c niri-caelestia-shell ipc call ...`
 
@@ -555,7 +555,7 @@ Config lives in:
     "launcher": {
         "actionPrefix": ">",
         "dragThreshold": 50,
-        "vimKeybinds": false,
+    // ...existing code...
         "enableDangerousActions": false,
         "maxShown": 8,
         "maxWallpapers": 9,

@@ -3,7 +3,7 @@ import Quickshell.Io
 JsonObject {
     property bool enabled: true
     property int dragThreshold: 30
-    property bool vimKeybinds: false
+    // ...existing code...
     property Commands commands: Commands {}
 
     property Sizes sizes: Sizes {}
