@@ -17,7 +17,7 @@ GENERATED_DIR="$STATE_DIR/generated"
 SCSS_FILE="$GENERATED_DIR/material_colors.scss"
 
 # Python virtual environment for materialyoucolor and friends
-PYTHON_VENV="${ILLOGICAL_IMPULSE_VIRTUAL_ENV:-}"
+PYTHON_VENV="$HOME/.local/state/quickshell/.venv"
 
 mkdir -p "$GENERATED_DIR"
 

@@ -63,7 +63,7 @@ activate_venv() {
             return 0
         fi
     fi
-    warn "Python venv not found (set ILLOGICAL_IMPULSE_VIRTUAL_ENV); using system Python"
+    warn "Python venv not found at $HOME/.local/state/quickshell/.venv; using system Python"
     return 0
 }
 
