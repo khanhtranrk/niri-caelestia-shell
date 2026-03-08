@@ -54,8 +54,9 @@ Based on [jutraim's niri-caelestia-shell](https://github.com/jutraim/niri-caeles
 - **Enhanced Workspace Bar**: Program icons, drag-to-reorder windows, context menus, app grouping
 - **System Monitor**: Real-time CPU/GPU/Memory stats (AMD/NVIDIA, no Intel yet)
 - **Niri Integration**: Dashboard controls for Niri IPC commands
-// ...existing code...
-- **Clipboard Manager**: History-based clipboard with search and management
+- **Launcher Modes**: Integrated clipboard, web search, calculator, and more — all triggered via `>` prefix
+- **OCR & Google Lens**: Region picker modes for text extraction (Tesseract) and visual search (Google Lens)
+- **Area Picker Modes**: Custom cursor indicators for screenshot, OCR, and Lens modes
 
 All built on top of the Niri window manager adaptation from the upstream fork.
 
@@ -68,7 +69,7 @@ You need both runtime dependencies and development headers.
 <br>
 
 * All dependencies in plain text:
-   * `quickshell-git networkmanager fish glibc qt6-declarative gcc-libs cava libcava aubio libpipewire ddcutil brightnessctl ttf-material-icons-git ttf-jetbrains-mono grim swappy app2unit libqalculate python-materialyoucolor wl-clipboard cliphist`
+   * `quickshell-git networkmanager fish glibc qt6-declarative gcc-libs cava libcava aubio libpipewire ddcutil brightnessctl ttf-material-icons-git ttf-jetbrains-mono grim swappy app2unit libqalculate python-materialyoucolor wl-clipboard cliphist tesseract tesseract-data-eng curl`
 
 > [!NOTE]
 >
@@ -84,7 +85,7 @@ You need both runtime dependencies and development headers.
 | Core | `quickshell-git`, `networkmanager`, `fish`, `glibc`, `qt6-declarative`, `gcc-libs` |
 | Audio & Visual | `cava`, `libcava`, `aubio`, `libpipewire`, `ddcutil`, `brightnessctl`, `materialyoucolor` |
 | Fonts | `ttf-material-icons-git`, `ttf-jetbrains-mono` |
-| Screenshot & Utils | `grim`, `swappy`, `app2unit`, `libqalculate` |
+| Screenshot & Utils | `grim`, `swappy`, `app2unit`, `libqalculate`, `tesseract`, `tesseract-data-eng`, `curl` |
 | Clipboard | `wl-clipboard`, `cliphist` |
 | Build | `cmake`, `ninja` |
 
@@ -128,6 +129,14 @@ Then simply build and install using `cmake`.
     so grab the necessary permissions or use sudo while installing.
 
     If you get `VERSION is not set and failed to get from git` error, that means I forgot to tag version. You can do `git tag 1.1.1` to work around it :)
+
+4. Run the setup script (installs system packages, Python venv, services):
+
+    ```sh
+    ./scripts/setup/setup.sh
+    ```
+
+    > The setup script supports flags: `--skip-deps`, `--skip-python`, `--skip-services`
 
 <!-- 
     
@@ -204,6 +213,8 @@ All IPC commands can be called via `quickshell -c niri-caelestia-shell ipc call 
   target picker
     function open(): void
     function openFreeze(): void
+    function regionOcr(): void
+    function regionSearch(): void
   target quicktoggles
     function open(): void
     function toggle(): void
@@ -226,6 +237,11 @@ All IPC commands can be called via `quickshell -c niri-caelestia-shell ipc call 
     function list(): string
   target controlCenter
     function open(): void
+  target toaster
+    function info(title: string, message: string, icon: string): void
+    function success(title: string, message: string, icon: string): void
+    function warn(title: string, message: string, icon: string): void
+    function error(title: string, message: string, icon: string): void
   target lock
     function isLocked(): bool
     function lock(): void
@@ -294,6 +310,12 @@ binds {
     
     // Region/Screenshot tools
     Mod+Shift+S { spawn-sh "qs -c niri-caelestia-shell ipc call picker open"; }
+    
+    // OCR (extract text from screen region)
+    Mod+Shift+X { spawn-sh "qs -c niri-caelestia-shell ipc call picker regionOcr"; }
+    
+    // Google Lens (visual search from screen region)
+    Mod+Shift+A { spawn-sh "qs -c niri-caelestia-shell ipc call picker regionSearch"; }
     
     // Applications (change "kitty" to your preferred terminal)
     Mod+T { spawn "kitty"; }
