@@ -105,7 +105,7 @@ StyledListView {
         const text = _debouncedText;
         const prefix = Config.launcher.actionPrefix;
         if (text.startsWith(prefix)) {
-            for (const action of ["calc", "scheme", "variant", "clip"])
+            for (const action of ["calc", "scheme", "variant", "clip", "web"])
                 if (text.startsWith(`${prefix}${action} `))
                     return action;
 
@@ -169,6 +169,14 @@ StyledListView {
             PropertyChanges {
                 model.values: root._clipFilteredValues
                 root.delegate: clipItem
+            }
+        },
+        State {
+            name: "web"
+
+            PropertyChanges {
+                model.values: [0]
+                root.delegate: webItem
             }
         }
     ]
@@ -320,6 +328,14 @@ StyledListView {
         id: clipItem
 
         ClipItem {
+            list: root
+        }
+    }
+
+    Component {
+        id: webItem
+
+        WebItem {
             list: root
         }
     }

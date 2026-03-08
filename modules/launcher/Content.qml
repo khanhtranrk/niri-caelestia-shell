@@ -72,6 +72,7 @@ Item {
                     case "actions": return "terminal";
                     case "calc": return "calculate";
                     case "clip": return "content_paste";
+                    case "web": return "travel_explore";
                     case "scheme": return "palette";
                     case "variant": return "format_paint";
                     case "wallpapers": return "wallpaper";
@@ -89,6 +90,7 @@ Item {
                     case "actions": return qsTr("Actions");
                     case "calc": return qsTr("Calculator");
                     case "clip": return qsTr("Clipboard");
+                    case "web": return qsTr("Web Search");
                     case "scheme": return qsTr("Colour Scheme");
                     case "variant": return qsTr("Variant");
                     case "wallpapers": return qsTr("Wallpapers");
@@ -157,6 +159,8 @@ Item {
                         if (text.startsWith(`${Config.launcher.actionPrefix}calc `))
                             currentItem.onClicked();
                         else if (text.startsWith(`${Config.launcher.actionPrefix}clip `))
+                            currentItem.onClicked();
+                        else if (text.startsWith(`${Config.launcher.actionPrefix}web `))
                             currentItem.onClicked();
                         else
                             currentItem.modelData.onClicked(list.currentList);

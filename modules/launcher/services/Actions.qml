@@ -68,6 +68,15 @@ Searcher {
             }
         },
         Action {
+            name: qsTr("Web Search")
+            desc: qsTr("Search the web or open a URL")
+            icon: "travel_explore"
+
+            function onClicked(list: AppList): void {
+                root.autocomplete(list, "web");
+            }
+        },
+        Action {
             name: qsTr("Transparency")
             desc: qsTr("Change shell transparency")
             icon: "opacity"
