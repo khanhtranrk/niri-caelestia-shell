@@ -8,6 +8,7 @@ import "modules/areapicker"
 import "modules/lock"
 import "modules/quicktoggles"
 import "modules/background"
+import "modules/polkit"
 import qs.modules.controlcenter
 import qs.services
 
@@ -22,6 +23,9 @@ ShellRoot {
 
     Shortcuts {}
     QuickTogglesPanel {}
+
+    // Native polkit authentication agent — replaces polkit-kde-authentication-agent-1
+    PolkitDialog {}
 
     // Initialize BatteryMonitor service
     property var _batteryMonitor: BatteryMonitor
