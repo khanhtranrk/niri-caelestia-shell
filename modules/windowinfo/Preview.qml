@@ -12,21 +12,14 @@ Item {
     id: root
 
     required property ShellScreen screen
-    // required property HyprlandToplevel client
 
-    property var client: null // NEW LOGIC
+    // Client is snapshotted by WindowInfo.qml on open.
+    // DO NOT add Connections here – follow-mouse focus would re-target this.
+    property var client: null
 
-    Connections {
-        target: Niri // Listen to the Niri singleton
-
-        function onFocusedWindowChanged(): void {
-            root.client = Niri.focusedWindow || Niri.lastFocusedWindow || null;
-        }
-    }
-    // Initial setup in Component.onCompleted
-    Component.onCompleted: {
-        root.client = Niri.focusedWindow || Niri.lastFocusedWindow;
-    }
+    // Niri currently does not support the hyprland-toplevel-export-v1 protocol,
+    // which prevents ScreencopyView from capturing individual Wayland windows.
+    // We will use a large application icon instead of a blank screen.
 
     Layout.preferredWidth: preview.implicitWidth + Appearance.padding.xl * 2
     Layout.fillHeight: true
@@ -40,7 +33,7 @@ Item {
         anchors.topMargin: Appearance.padding.xl
         anchors.bottomMargin: Appearance.spacing.lg
 
-        implicitWidth: view.implicitWidth
+        implicitWidth: parent.height
 
         color: Colours.tPalette.m3surfaceContainer
         radius: Appearance.rounding.small
@@ -77,39 +70,21 @@ Item {
             }
         }
 
-        ScreencopyView {
-            id: view
-
+        // Fallback for ScreencopyView since Niri lacks hyprland-toplevel-export-v1
+        IconImage {
+            id: appIcon
+            
             anchors.centerIn: parent
-
-            // --- NIRI SPECIFIC CAPTURE SOURCE ---
-            // Niri's 'Window' objects don't directly expose a `wayland` property for ScreencopyView.
-            // You need to either:
-            // 1. Extend Niri.qml's window objects with a 'waylandClient' property that resolves to a WaylandClient.
-            // 2. Use Quickshell.Wayland.findClientByPid or findClientByAppId.
-            // 3. (Best for Niri) Niri's IPC can provide direct surface IDs or handles that ScreencopyView might use.
-            //    If your Niri.qml already enriches the window object with a direct WaylandClient object, use that.
-            //    Otherwise, we'll try to find it.
-            // Assuming your Niri.qml's 'Window' objects have a 'waylandClient' property (of type WaylandClient)
-            // or we can lookup by pid/app_id.
-            captureSource: {
-                if (root.client) {
-                    // Option 1: If you extended Niri.qml's window objects with a direct WaylandClient
-                    // return root.client.waylandClient;
-
-                    // Option 2: Look up by PID (more reliable than app_id for specific instances)
-                    // This relies on Quickshell.Wayland.findClientByPid
-                    return Quickshell.Wayland.findClientByPid(root.client.pid);
-
-                    // Option 3: Look up by App ID (less precise if multiple windows of same app)
-                    // return Quickshell.Wayland.findClientByAppId(root.client.app_id);
-                }
-                return null;
-            }
-            live: true
-
-            constraintSize.width: parent.height
-            constraintSize.height: parent.height
+            visible: root.client !== null
+            
+            // Set a large size for the icon in the preview area
+            property real size: parent.height * 0.6
+            width: size
+            height: size
+            sourceSize.width: size
+            sourceSize.height: size
+            
+            source: Icons.getAppIcon(root.client?.app_id ?? "", "application-default-icon")
         }
     }
 
@@ -125,9 +100,7 @@ Item {
             const client = root.client;
             if (!client)
                 return qsTr("No active client");
-
-            const mon = client.monitor;
-            return qsTr("%1 -> WORKSPACE: %2").arg(client.title).arg(client.workspace_id);
+            return qsTr("%1 → WORKSPACE: %2").arg(client.title).arg(client.workspace_id);
         }
     }
 }

@@ -9,18 +9,9 @@ import QtQuick.Layouts
 ColumnLayout {
     id: root
 
+    // Client is snapshotted by WindowInfo.qml on open.
+    // Do NOT add Connections here – follow-mouse focus would re-target this.
     property var client: null
-
-    Connections {
-        target: Niri // Listen to the Niri singleton
-        function onFocusedWindowChanged(): void {
-            root.client = Niri.focusedWindow || Niri.lastFocusedWindow || null;
-        }
-    }
-
-    Component.onCompleted: {
-        root.client = Niri.focusedWindow || Niri.lastFocusedWindow;
-    }
 
     anchors.fill: parent
     spacing: Appearance.spacing.sm
@@ -65,62 +56,9 @@ ColumnLayout {
         }
     }
 
-    CollapsibleSection {
-        id: utilities // Give it an ID to reference its functions
-        title: qsTr("Utilities")
-        backgroundMarginTop: 0
-
-        //  toggleWindowOpacity
-        //  expandColumnToAvailable
-        //  centerWindow
-        //  screenshotWindow
-        //  keyboardShortcutsInhibitWindow
-        //  toggleWindowedFullscreen
-        //  toggleFullscreen
-        //  toggleMaximize
-        RowLayout {
-            Layout.fillWidth: true
-            // Layout.leftMargin: Appearance.padding.xl
-            // Layout.rightMargin: Appearance.padding.xl
-
-            Button {
-                color: Colours.palette.m3secondaryContainer
-                onColor: Colours.palette.m3onSecondaryContainer
-                text: qsTr("Center")
-                icon: "center_focus_strong"
-
-                function onClicked(): void {
-                    Niri.centerWindow();
-                }
-            }
-            Button {
-                color: Colours.palette.m3secondaryContainer
-                onColor: Colours.palette.m3onSecondaryContainer
-                text: qsTr("Screenshot")
-                icon: "camera"
-                // Layout.fillWidth: false
-
-                function onClicked(): void {
-                    Niri.screenshotWindow();
-                }
-            }
-            Button {
-                color: Colours.palette.m3secondaryContainer
-                onColor: Colours.palette.m3onSecondaryContainer
-                icon: "disabled_visible"
-                text: qsTr("Inhibit Shortcuts")
-                // Layout.fillWidth: false
-                function onClicked(): void {
-                    Niri.keyboardShortcutsInhibitWindow();
-                }
-            }
-        }
-    }
-
     // ***************************************************
 
     Loader {
-
         active: wrapper.isDetached
         asynchronous: true
         Layout.fillWidth: active
@@ -165,7 +103,7 @@ ColumnLayout {
                 icon: "close"
 
                 function onClicked(): void {
-                    Niri.closeFocusedWindow();
+                    Niri.closeWindow(root.client?.id);
                 }
             }
         }

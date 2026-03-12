@@ -13,6 +13,14 @@ Singleton {
     property int maxProcesses: 100
     property bool isUpdating: false
 
+    Timer {
+        id: pollTimer
+        interval: root.updateInterval
+        running: root.refCount > 0
+        repeat: true
+        onTriggered: root.updateAllStats()
+    }
+
     property var processes: []
     property string sortBy: "cpu"
     property bool sortDescending: true
@@ -182,6 +190,35 @@ Singleton {
         array.push(value);
         if (array.length > historySize)
             array.shift();
+    }
+
+    function formatCpuUsage(usage) {
+        if (!usage) return "0.0%";
+        return usage.toFixed(1) + "%";
+    }
+
+    function formatMemoryUsage(kb) {
+        if (!kb) return "0 MiB";
+        if (kb >= 1048576) {
+            return (kb / 1048576).toFixed(1) + " GiB";
+        } else if (kb >= 1024) {
+            return (kb / 1024).toFixed(1) + " MiB";
+        } else {
+            return kb + " KiB";
+        }
+    }
+
+    function getProcessIcon(command) {
+        // Fallback or basic heuristics for process icons
+        if (!command) return "memory";
+        let cmd = command.toLowerCase();
+        if (cmd.includes("firefox") || cmd.includes("chrome") || cmd.includes("browser")) return "language";
+        if (cmd.includes("code") || cmd.includes("nvim") || cmd.includes("vim")) return "code";
+        if (cmd.includes("player") || cmd.includes("vlc") || cmd.includes("mpv")) return "play_circle";
+        if (cmd.includes("discord") || cmd.includes("slack")) return "chat";
+        if (cmd.includes("terminal") || cmd.includes("alacritty") || cmd.includes("kitty")) return "terminal";
+        if (cmd.includes("system") || cmd.includes("daemon")) return "settings_applications";
+        return "memory";
     }
 
     function formatSystemMemory(kb) {

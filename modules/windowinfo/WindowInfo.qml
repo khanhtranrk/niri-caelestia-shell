@@ -10,8 +10,19 @@ Item {
     id: root
 
     required property ShellScreen screen
-    // Client is now dynamically fetched from Niri service in Details.qml
+
+    // Snapshotted on open – not updated live so follow-mouse focus doesn't
+    // change which window is being inspected. Use the Refresh button to update.
     property var client: null
+
+    Component.onCompleted: {
+        root.client = Niri.focusedWindow ?? Niri.lastFocusedWindow ?? null;
+    }
+
+    // Expose a refresh function so Buttons.qml can trigger it
+    function refreshClient(): void {
+        root.client = Niri.focusedWindow ?? Niri.lastFocusedWindow ?? null;
+    }
 
     implicitWidth: child.implicitWidth
     implicitHeight: screen.height * Config.winfo.sizes.heightMult
