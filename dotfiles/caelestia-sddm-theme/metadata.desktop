@@ -1,0 +1,11 @@
+[SddmGreeterTheme]
+Name=caelestia-sddm-theme
+Description=SDDM theme matching niri-caelestia-shell lockscreen (Material You / Quickshell)
+Author=caelestia-sddm-theme contributors
+Website=https://github.com/AyushKr2003/niri-caelestia-shell
+Version=1.0
+License=GPL-3.0
+Type=sddm-theme
+MainScript=Main.qml
+ConfigFile=theme.conf
+Screenshot=Previews/preview.png

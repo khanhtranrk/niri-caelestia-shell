@@ -1,0 +1,7 @@
+# Add this block to ~/.config/matugen/config.toml
+# It hooks into your existing caelestia theming pipeline
+
+[templates.caelestia-sddm]
+input_path  = '~/.config/caelestia-sddm-theme/SddmColors.qml'
+output_path = '~/.config/caelestia-sddm-theme/Colors.qml'
+post_hook   = 'sudo ~/.config/caelestia-sddm-theme/sddm-theme-apply.sh &'
