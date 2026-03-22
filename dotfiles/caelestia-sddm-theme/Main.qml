@@ -16,11 +16,11 @@
 //   - Status area: error in m3error, caps/kb in m3onSurfaceVariant
 //   - Bottom bar: session + keyboard (SDDM ComboBox) + power buttons
 
-import QtQuick
-import QtQuick.Controls
-import QtQuick.Layouts
-import QtQuick.Effects
-import SddmComponents
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Effects 1.0
+import SddmComponents 2.0
 
 Rectangle {
     id: root

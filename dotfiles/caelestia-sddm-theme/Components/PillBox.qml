@@ -1,7 +1,7 @@
 // PillBox.qml — reusable translucent pill container for bar items
 
-import QtQuick
-import QtQuick.Layouts
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 Rectangle {
     id: root

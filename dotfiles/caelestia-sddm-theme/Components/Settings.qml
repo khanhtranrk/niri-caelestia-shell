@@ -1,7 +1,7 @@
 // Settings.qml — user config. Edit ~/.config/caelestia-sddm-theme/Settings.qml
 // then run the apply script.
 
-import QtQuick
+import QtQuick 2.15
 
 Item {
     readonly property string wallpaperPath:   ""   // set by apply script or pass via test.sh

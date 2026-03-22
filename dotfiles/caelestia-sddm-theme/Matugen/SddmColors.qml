@@ -4,7 +4,7 @@
 
 // NOTE: This file is the INPUT template — do not edit Colors.qml directly.
 
-import QtQuick
+import QtQuick 2.15
 
 QtObject {
     // Material You color tokens (dark scheme)
