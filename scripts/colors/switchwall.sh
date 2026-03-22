@@ -87,7 +87,7 @@ run_matugen_templates() {
         return
     fi
 
-    matugen image "$imgpath" --mode "$mode" --type "$scheme_type" &>/dev/null &
+    matugen image "$imgpath" --mode "$mode" --type "$scheme_type" --source-color-index 0 &>/dev/null &
 }
 
 # Post-processing: KDE/Dolphin colors + VS Code accent color

@@ -22,16 +22,19 @@ Searcher {
         return str.replace(/_([a-z])/g, (match, letter) => letter.toUpperCase());
     }
 
-    // Transform matugen output to expected format
     function transformMatugenOutput(data: var, mode: string): var {
         const colours = {};
         const matugenColors = data.colors;
 
         for (const [name, values] of Object.entries(matugenColors)) {
             const camelName = snakeToCamel(name);
-            // Get the color for the specified mode, strip the # prefix
-            const hexColor = values[mode] || values["default"];
-            if (hexColor) {
+            // Get the color for the specified mode
+            let colorObj = values[mode] || values["default"];
+            
+            // Handle matugen 4.0.0 structure where color is nested in an object
+            let hexColor = (typeof colorObj === 'object' && colorObj !== null) ? colorObj.color : colorObj;
+            
+            if (hexColor && typeof hexColor === 'string') {
                 colours[camelName] = hexColor.replace("#", "");
             }
         }
@@ -39,11 +42,17 @@ Searcher {
         // Add palette key colors from palettes if available
         if (data.palettes) {
             const palettes = data.palettes;
-            if (palettes.primary) colours["primary_paletteKeyColor"] = (palettes.primary["40"] || "").replace("#", "");
-            if (palettes.secondary) colours["secondary_paletteKeyColor"] = (palettes.secondary["40"] || "").replace("#", "");
-            if (palettes.tertiary) colours["tertiary_paletteKeyColor"] = (palettes.tertiary["40"] || "").replace("#", "");
-            if (palettes.neutral) colours["neutral_paletteKeyColor"] = (palettes.neutral["40"] || "").replace("#", "");
-            if (palettes.neutral_variant) colours["neutral_variant_paletteKeyColor"] = (palettes.neutral_variant["40"] || "").replace("#", "");
+            const extractPaletteColor = (p) => {
+                if (!p || !p["40"]) return "";
+                let val = p["40"];
+                return (typeof val === 'object' && val !== null ? val.color : val).replace("#", "");
+            };
+
+            if (palettes.primary) colours["primary_paletteKeyColor"] = extractPaletteColor(palettes.primary);
+            if (palettes.secondary) colours["secondary_paletteKeyColor"] = extractPaletteColor(palettes.secondary);
+            if (palettes.tertiary) colours["tertiary_paletteKeyColor"] = extractPaletteColor(palettes.tertiary);
+            if (palettes.neutral) colours["neutral_paletteKeyColor"] = extractPaletteColor(palettes.neutral);
+            if (palettes.neutral_variant) colours["neutral_variant_paletteKeyColor"] = extractPaletteColor(palettes.neutral_variant);
         }
 
         // Add success colors (not in matugen)
@@ -254,7 +263,7 @@ Searcher {
                 matugenType = variantMap[variant];
             }
 
-            command = ["matugen", "image", wallpaper, "--dry-run", "--json", "hex", "--mode", mode, "--type", matugenType];
+            command = ["matugen", "image", wallpaper, "--dry-run", "--json", "hex", "--mode", mode, "--type", matugenType, "--source-color-index", "0"];
             console.log("Running matugen:", JSON.stringify(command));
             running = true;
         }

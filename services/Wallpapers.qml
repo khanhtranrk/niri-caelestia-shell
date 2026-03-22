@@ -59,7 +59,7 @@ Searcher {
             console.warn("Failed to run color generation:", e);
             // Fallback to just matugen
             try {
-                matugenProcess.command = ["matugen", "image", imagePath];
+                matugenProcess.command = ["matugen", "image", imagePath, "--source-color-index", "0"];
                 matugenProcess.running = true;
             } catch (e2) {
                 console.warn("Failed to run matugen:", e2);
