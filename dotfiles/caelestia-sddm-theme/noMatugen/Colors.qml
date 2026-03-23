@@ -1,7 +1,7 @@
 // Colors.qml — Matugen-generated (default Caelestia purple)
 // "on*" tokens renamed to "col*" and "text*" to avoid QML signal-handler collision.
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     readonly property color background:          "#111118"

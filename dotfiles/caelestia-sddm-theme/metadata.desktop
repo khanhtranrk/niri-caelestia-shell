@@ -9,3 +9,4 @@ Type=sddm-theme
 MainScript=Main.qml
 ConfigFile=theme.conf
 Screenshot=Previews/preview.png
+QtVersion=6

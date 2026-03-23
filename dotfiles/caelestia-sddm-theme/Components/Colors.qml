@@ -2,7 +2,7 @@
 // Overwritten by Matugen on wallpaper change.
 // NOTE: All "on*" tokens renamed to "col*" to avoid QML signal-handler collision.
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     // Surfaces

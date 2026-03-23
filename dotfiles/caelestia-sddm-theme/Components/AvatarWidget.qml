@@ -1,6 +1,6 @@
 // AvatarWidget.qml — circular avatar with primary ring
 
-import QtQuick 2.15
+import QtQuick
 
 Item {
     id: root
