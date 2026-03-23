@@ -25,7 +25,7 @@ Colors are the same Material You dark tokens Matugen generates for your shell â€
 ## Dependencies
 
 ```bash
-yay -S --needed sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg
+yay -S --needed sddm qt6-svg qt6-multimedia-ffmpeg
 ```
 
 Fonts used (already in your shell setup):
@@ -62,10 +62,6 @@ chmod +x ~/.config/caelestia-sddm-theme/sddm-theme-apply.sh
 
 # 3. Configure /etc/sddm.conf
 sudo tee /etc/sddm.conf << CONF
-[General]
-InputMethod=qtvirtualkeyboard
-GreeterEnvironment=QML2_IMPORT_PATH=/usr/share/sddm/themes/caelestia-sddm-theme/Components/,QT_IM_MODULE=qtvirtualkeyboard
-
 [Theme]
 Current=caelestia-sddm-theme
 CONF

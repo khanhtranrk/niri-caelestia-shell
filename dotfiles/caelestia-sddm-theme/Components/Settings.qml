@@ -14,8 +14,6 @@ Item {
     readonly property string monoFontFamily:  "JetBrains Mono Nerd Font"
 
     readonly property bool   showAvatars:     true
-    // virtualKeyboard: false unless qt6-virtualkeyboard is installed
-    readonly property bool   virtualKeyboard: false
 
     readonly property int    animDuration:    280
 }

@@ -629,34 +629,23 @@ Rectangle {
             }
             height: 32
             radius: 16
-            width: sessionIconText.implicitWidth + sessionCombo.width + 28
+            width: sessionCombo.width + 24
             color: Qt.rgba(root.m3surfaceContainer.r, root.m3surfaceContainer.g, root.m3surfaceContainer.b, 0.75)
             border {
                 width: 1
                 color: Qt.rgba(root.m3outlineVariant.r, root.m3outlineVariant.g, root.m3outlineVariant.b, 0.40)
             }
 
-            Text {
-                id: sessionIconText
-                anchors {
-                    left:           parent.left
-                    leftMargin:     12
-                    verticalCenter: parent.verticalCenter
-                }
-                text: "\ue84f"
-                font { family: "Material Symbols Rounded"; pixelSize: 14 }
-                color: root.m3onSurfaceVariant
-            }
-
             ComboBox {
                 id: sessionCombo
                 anchors {
-                    left:           sessionIconText.right
+                    left:           parent.left
+                    leftMargin:     12
                     right:          parent.right
-                    rightMargin:    6
+                    rightMargin:    12
                     verticalCenter: parent.verticalCenter
                 }
-                width:  140
+                width:  120
                 height: 24
                 model:       sessionModel
                 index:       sessionModel.lastIndex
@@ -669,59 +658,15 @@ Rectangle {
                 font.family:    root.fontUi
                 font.pixelSize: 12
                 onValueChanged: sessionModel.lastIndex = id
+
+                // SddmComponents.ComboBox often opens downward by default. 
+                // We try to force it upward if the component supports it.
+                // Note: Standard SDDM ComboBox might not expose 'y' for the menu.
             }
         }
 
-        // ── Keyboard pill ─────────────────────────────────────────────────
-        Rectangle {
-            anchors {
-                horizontalCenter: parent.horizontalCenter
-                verticalCenter:   parent.verticalCenter
-            }
-            height: 32
-            radius: 16
-            width: kbIconText.implicitWidth + kbCombo.width + 28
-            color: Qt.rgba(root.m3surfaceContainer.r, root.m3surfaceContainer.g, root.m3surfaceContainer.b, 0.75)
-            border {
-                width: 1
-                color: Qt.rgba(root.m3outlineVariant.r, root.m3outlineVariant.g, root.m3outlineVariant.b, 0.40)
-            }
+        // ── Keyboard pill removed ──
 
-            Text {
-                id: kbIconText
-                anchors {
-                    left:           parent.left
-                    leftMargin:     12
-                    verticalCenter: parent.verticalCenter
-                }
-                text: "\ue312"
-                font { family: "Material Symbols Rounded"; pixelSize: 14 }
-                color: root.m3onSurfaceVariant
-            }
-
-            ComboBox {
-                id: kbCombo
-                anchors {
-                    left:           kbIconText.right
-                    right:          parent.right
-                    rightMargin:    6
-                    verticalCenter: parent.verticalCenter
-                }
-                width:  150
-                height: 24
-                model:       keyboard.layouts
-                index:       keyboard.currentLayout
-                color:       "transparent"
-                menuColor:   Qt.rgba(root.m3surfaceContainerHigh.r, root.m3surfaceContainerHigh.g, root.m3surfaceContainerHigh.b, 0.97)
-                textColor:   root.m3onSurface
-                borderColor: "transparent"
-                hoverColor:  Qt.rgba(root.m3primary.r, root.m3primary.g, root.m3primary.b, 0.18)
-                focusColor:  Qt.rgba(root.m3primary.r, root.m3primary.g, root.m3primary.b, 0.35)
-                font.family:    root.fontUi
-                font.pixelSize: 12
-                onValueChanged: keyboard.currentLayout = id
-            }
-        }
 
         // ── Power pill ────────────────────────────────────────────────────
         Rectangle {

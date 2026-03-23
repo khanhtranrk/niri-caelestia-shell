@@ -125,8 +125,7 @@ info "Configuring $SDDM_CONF ..."
 
 sudo tee "$SDDM_CONF" > /dev/null << CONF
 [General]
-InputMethod=qtvirtualkeyboard
-GreeterEnvironment=QML2_IMPORT_PATH=/usr/share/sddm/themes/$THEME_NAME/Components/,QT_IM_MODULE=qtvirtualkeyboard
+InputMethod=
 
 [Theme]
 Current=$THEME_NAME

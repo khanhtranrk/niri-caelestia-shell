@@ -73,55 +73,8 @@ Item {
         }
     }
 
-    // ── Keyboard layout ────────────────────────────────────────────────────
-    Pill {
-        anchors { horizontalCenter: parent.horizontalCenter; verticalCenter: parent.verticalCenter }
-        width: kbRow.implicitWidth + 28
+    // ── Keyboard layout removed ──
 
-        RowLayout {
-            id: kbRow
-            anchors { fill: parent; leftMargin: 14; rightMargin: 14 }
-            spacing: 8
-
-            Text {
-                text: "\ue312"
-                font { family: "Material Symbols Rounded"; pixelSize: 15 }
-                color: root.colTextSecondary
-            }
-
-            ComboBox {
-                id:           kbCombo
-                model:        keyboard.layouts
-                currentIndex: keyboard.currentLayout
-                textRole:     "longName"
-                implicitWidth: 160; implicitHeight: 32
-                font { family: root.uiFontFamily; pixelSize: 13 }
-
-                contentItem: Text {
-                    leftPadding: 2; text: kbCombo.displayText; font: kbCombo.font
-                    color: root.colTextPrimary; verticalAlignment: Text.AlignVCenter; elide: Text.ElideRight
-                }
-                background: Item {}
-
-                delegate: ItemDelegate {
-                    width: kbCombo.popup.width - 12
-                    contentItem: Text { text: model.longName; font { family: root.uiFontFamily; pixelSize: 12 }; color: root.colTextPrimary; verticalAlignment: Text.AlignVCenter; elide: Text.ElideRight }
-                    background: Rectangle {
-                        color: hovered ? Qt.rgba(root.colPrimary.r, root.colPrimary.g, root.colPrimary.b, 0.15) : "transparent"; radius: 6
-                    }
-                }
-                popup: Popup {
-                    y: -height - 4; width: 220; padding: 6
-                    contentItem: ListView { implicitHeight: Math.min(contentHeight, 240); model: kbCombo.delegateModel; clip: true }
-                    background: Rectangle {
-                        color: Qt.rgba(root.colSurface.r, root.colSurface.g, root.colSurface.b, 0.96)
-                        radius: 12; border { color: Qt.rgba(root.colOutline.r, root.colOutline.g, root.colOutline.b, 0.3); width: 1 }
-                    }
-                }
-                onCurrentIndexChanged: keyboard.currentLayout = currentIndex
-            }
-        }
-    }
 
     // ── Power ─────────────────────────────────────────────────────────────
     Pill {
