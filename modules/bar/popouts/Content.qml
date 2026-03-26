@@ -29,18 +29,6 @@ Item {
             WsContextPopout {}
         }
 
-        // Popout { // TODO
-        //     name: "workspaces"
-        //     sourceComponent: WorkspacesPopout {}
-        // }
-
-        Popout {
-            name: "activewindow"
-            sourceComponent: ActiveWindow {
-                wrapper: root.wrapper
-            }
-        }
-
         Popout {
             name: "network"
             sourceComponent: Network {}

@@ -69,10 +69,6 @@ ColumnLayout {
                 popouts.currentCenter = Qt.binding(() => trayItem.mapToItem(root, 0, trayItem.implicitHeight / 2).y);
                 popouts.hasCurrent = true;
             }
-        } else if (id === "activeWindow") {
-            popouts.currentName = id.toLowerCase();
-            popouts.currentCenter = item.mapToItem(root, 0, itemHeight / 2).y;
-            popouts.hasCurrent = true;
         }
     }
 

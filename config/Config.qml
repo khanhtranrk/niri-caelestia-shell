@@ -19,7 +19,6 @@ Singleton {
     property alias notifs: adapter.notifs
     property alias osd: adapter.osd
     property alias session: adapter.session
-    property alias winfo: adapter.winfo
     property alias lock: adapter.lock
     property alias utilities: adapter.utilities
     property alias services: adapter.services
@@ -75,7 +74,6 @@ Singleton {
             notifs: serializeNotifs,
             osd: serializeOsd,
             session: serializeSession,
-            winfo: serializeWinfo,
             lock: serializeLock,
             utilities: serializeUtilities,
             services: serializeServices,
@@ -373,15 +371,6 @@ Singleton {
         };
     }
 
-    function serializeWinfo(): var {
-        return {
-            sizes: {
-                heightMult: winfo.sizes.heightMult,
-                detailsWidth: winfo.sizes.detailsWidth
-            }
-        };
-    }
-
     function serializeLock(): var {
         return {
             recolourLogo: lock.recolourLogo,
@@ -513,7 +502,6 @@ Singleton {
             property NotifsConfig notifs: NotifsConfig {}
             property OsdConfig osd: OsdConfig {}
             property SessionConfig session: SessionConfig {}
-            property WInfoConfig winfo: WInfoConfig {}
             property LockConfig lock: LockConfig {}
             property UtilitiesConfig utilities: UtilitiesConfig {}
             property ServiceConfig services: ServiceConfig {}
