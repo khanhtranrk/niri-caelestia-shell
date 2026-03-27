@@ -7,7 +7,6 @@
   fish,
   ddcutil,
   brightnessctl,
-  app2unit,
   networkmanager,
   lm_sensors,
   swappy,
@@ -15,6 +14,8 @@
   libqalculate,
   fftw,
   bash,
+  ffmpeg,
+  gst_all_1,
   material-symbols,
   rubik,
   nerd-fonts,
@@ -39,13 +40,13 @@
       fish
       ddcutil
       brightnessctl
-      app2unit
       networkmanager
       lm_sensors
       swappy
       wl-clipboard
       libqalculate
       bash
+      ffmpeg
     ]
     ++ extraRuntimeDeps
     ++ lib.optional withCli caelestia-cli;
@@ -102,7 +103,7 @@ in
     src = ./..;
 
     nativeBuildInputs = [cmake ninja makeWrapper qt6.wrapQtAppsHook];
-    buildInputs = [quickshell extras plugin xkeyboard-config qt6.qtbase];
+    buildInputs = [quickshell extras plugin xkeyboard-config qt6.qtbase qt6.qtmultimedia];
     propagatedBuildInputs = runtimeDeps;
 
     cmakeBuildType =
@@ -147,4 +148,10 @@ in
       license = lib.licenses.gpl3Only;
       mainProgram = "caelestia-shell";
     };
+  }
+   };
+  }
+
+  }
+   };
   }

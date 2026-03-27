@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import qs.components
 import qs.services
 import qs.config
+import Caelestia
 import QtQuick
 import QtQuick.Effects
 import Quickshell
@@ -29,40 +30,67 @@ Variants {
 
         color: "transparent"
 
+        Connections {
+            target: Wallpapers
+            function onFrameReady(path): void {
+                if (path === Wallpapers.current) {
+                    console.log("Backdrop: frame ready, force-updating source");
+                    const old = bgImage.source;
+                    bgImage.source = "";
+                    bgImage.source = old;
+                }
+            }
+        }
+
         // Use the same wallpaper source as the main background
         readonly property string wallpaperSource: {
             const path = Wallpapers.current;
             if (!path) return "";
+            
+            const source = Wallpapers.getColorSource(path);
             // Ensure file:// prefix for local paths
-            if (path.startsWith("/")) return "file://" + path;
-            return path;
+            if (source.toString().startsWith("/")) return "file://" + source;
+            return source;
         }
 
-        Item {
-            id: blurContainer
+        Rectangle {
             anchors.fill: parent
+            color: "black"
+        }
 
-            layer.enabled: bgImage.status === Image.Ready
+        Rectangle {
+            anchors.fill: parent
+            color: Colours.palette.m3background
+            opacity: Colours.transparency.enabled ? 0.8 : 1
+        }
+
+        Image {
+            id: bgImage
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+            source: {
+                const src = backdropWindow.wallpaperSource;
+                if (!src) return "";
+                // If it's a local file (file://), check if it exists before trying to load
+                if (src.startsWith("file://")) {
+                    const localPath = src.substring(7);
+                    if (!CUtils.exists(localPath)) return "";
+                }
+                return src;
+            }
+            asynchronous: true
+            cache: true
+            smooth: true
+
+            opacity: status === Image.Ready ? 1 : 0
+            Behavior on opacity { Anim {} }
+
+            layer.enabled: status === Image.Ready
             layer.effect: MultiEffect {
+                autoPaddingEnabled: false
                 blurEnabled: true
                 blur: 0.8
                 blurMax: 64
-            }
-
-            Image {
-                id: bgImage
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectCrop
-                source: backdropWindow.wallpaperSource
-                asynchronous: true
-                cache: true
-                smooth: true
-                sourceSize.width: backdropWindow.screen?.width ?? 1920
-                sourceSize.height: backdropWindow.screen?.height ?? 1080
-
-                onStatusChanged: {
-                    console.log("Backdrop image status:", status, "source:", source.toString().slice(-40))
-                }
             }
         }
 

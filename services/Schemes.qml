@@ -241,12 +241,13 @@ Searcher {
         property string variant
         property string mode
         property string outputBuffer: ""
+        property int retryCount: 0
 
         running: false
 
         function run(): void {
             outputBuffer = "";
-            // Convert variant name to matugen type (e.g., "tonalspot" -> "scheme-tonal-spot")
+            // Convert variant name to matugen type
             let matugenType = "scheme-tonal-spot";
             const variantMap = {
                 "content": "scheme-content",
@@ -263,14 +264,21 @@ Searcher {
                 matugenType = variantMap[variant];
             }
 
-            command = ["matugen", "image", wallpaper, "--dry-run", "--json", "hex", "--mode", mode, "--type", matugenType, "--source-color-index", "0"];
+            const colorSource = Wallpapers.getColorSource(wallpaper);
+            command = ["matugen", "image", colorSource, "--dry-run", "--json", "hex", "--mode", mode, "--type", matugenType, "--source-color-index", "0"];
+            
+            // If it's a video and the frame might not exist yet, we should check/retry
+            if (Wallpapers.isPathVideo(wallpaper)) {
+                console.log("Checking for video frame:", colorSource);
+                // We'll let matugen try, and if it fails, we use the retry timer
+            }
+            
             console.log("Running matugen:", JSON.stringify(command));
             running = true;
         }
 
         stdout: SplitParser {
             onRead: data => {
-                // Accumulate output since JSON may span multiple lines
                 dynamicSchemeGenerator.outputBuffer += data;
             }
         }
@@ -285,8 +293,6 @@ Searcher {
             try {
                 const matugenData = JSON.parse(outputBuffer);
                 const colours = root.transformMatugenOutput(matugenData, mode);
-                console.log("Transformed colours, keys:", Object.keys(colours).length);
-
                 const stateData = {
                     name: "dynamic",
                     flavour: "default",
@@ -304,7 +310,9 @@ Searcher {
         }
 
         stderr: SplitParser {
-            onRead: data => console.error("Matugen error:", data)
+            onRead: data => {
+                console.error("Matugen error:", data);
+            }
         }
     }
 

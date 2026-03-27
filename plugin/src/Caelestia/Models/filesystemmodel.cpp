@@ -222,10 +222,16 @@ void FileSystemModel::updateEntriesForDir(const QString& dir) {
 
         std::optional<QDirIterator> iter;
 
-        if (filter == Images) {
+        if (filter == Images || filter == Videos || filter == ImagesAndVideos) {
             QStringList nameFilters;
-            for (const auto& format : QImageReader::supportedImageFormats()) {
-                nameFilters << "*." + format;
+            if (filter == Images || filter == ImagesAndVideos) {
+                for (const auto& format : QImageReader::supportedImageFormats()) {
+                    nameFilters << "*." + format;
+                }
+            }
+
+            if (filter == Videos || filter == ImagesAndVideos) {
+                nameFilters << "*.mp4" << "*.mkv" << "*.webm" << "*.mov" << "*.avi" << "*.m4v";
             }
 
             QDir::Filters filters = QDir::Files;
@@ -253,6 +259,7 @@ void FileSystemModel::updateEntriesForDir(const QString& dir) {
         }
 
         QSet<QString> newPaths;
+        const QMimeDatabase db;
         while (iter->hasNext()) {
             if (promise.isCanceled()) {
                 return;
@@ -263,6 +270,15 @@ void FileSystemModel::updateEntriesForDir(const QString& dir) {
             if (filter == Images) {
                 QImageReader reader(path);
                 if (!reader.canRead()) {
+                    continue;
+                }
+            } else if (filter == Videos) {
+                if (!db.mimeTypeForFile(path).name().startsWith("video/")) {
+                    continue;
+                }
+            } else if (filter == ImagesAndVideos) {
+                QImageReader reader(path);
+                if (!reader.canRead() && !db.mimeTypeForFile(path).name().startsWith("video/")) {
                     continue;
                 }
             }

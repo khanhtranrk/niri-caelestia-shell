@@ -187,7 +187,7 @@ ColumnLayout {
             CachingImage {
                 id: wallpaperFallback
                 anchors.fill: parent
-                path: Wallpapers.current
+                path: Wallpapers.getColorSource(Wallpapers.current)
                 visible: pfp.status !== Image.Ready && Config.dashboard.useWallpaperAvatar
             }
         }

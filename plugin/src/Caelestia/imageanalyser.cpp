@@ -2,6 +2,9 @@
 
 #include <QtConcurrent/qtconcurrentrun.h>
 #include <QtQuick/qquickitemgrabresult.h>
+#include <qcryptographichash.h>
+#include <qdir.h>
+#include <qfile.h>
 #include <qfuturewatcher.h>
 #include <qimage.h>
 #include <qquickwindow.h>
@@ -139,8 +142,21 @@ void ImageAnalyser::update() {
             m_futureWatcher->setFuture(QtConcurrent::run(&ImageAnalyser::analyse, grabResult->image(), m_rescaleSize));
         });
     } else {
+        QString actualSource = m_source;
+        if (m_source.endsWith(".mp4", Qt::CaseInsensitive) || m_source.endsWith(".mkv", Qt::CaseInsensitive) ||
+            m_source.endsWith(".webm", Qt::CaseInsensitive) || m_source.endsWith(".mov", Qt::CaseInsensitive) ||
+            m_source.endsWith(".avi", Qt::CaseInsensitive) || m_source.endsWith(".m4v", Qt::CaseInsensitive)) {
+            const QByteArray hash = QCryptographicHash::hash(m_source.toUtf8(), QCryptographicHash::Md5).toHex();
+            const QString home = QDir::homePath();
+            const QString cacheBase = qEnvironmentVariable("XDG_STATE_HOME", home + "/.local/state");
+            actualSource = cacheBase + "/caelestia/generated/video_frames/" + hash + ".png";
+        }
+
         m_futureWatcher->setFuture(QtConcurrent::run([=, this](QPromise<AnalyseResult>& promise) {
-            const QImage image(m_source);
+            if (!QFile::exists(actualSource)) {
+                return;
+            }
+            const QImage image(actualSource);
             analyse(promise, image, m_rescaleSize);
         }));
     }

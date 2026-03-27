@@ -111,6 +111,34 @@ switch() {
 
     acquire_lock
 
+    # Extract frame if video
+    local actual_img="$imgpath"
+    if [[ "$imgpath" =~ \.(mp4|mkv|webm|mov|avi|m4v|MP4|MKV|WEBM|MOV|AVI|M4V)$ ]]; then
+        local frames_dir="$GENERATED_DIR/video_frames"
+        mkdir -p "$frames_dir"
+        local hash
+        if command -v md5sum &>/dev/null; then
+            # Use printf %s to avoid echo nuances and ensure hash matches Qt.md5
+            hash=$(printf %s "$imgpath" | md5sum | cut -d' ' -f1)
+        else
+            hash=$(basename "$imgpath" | tr -cd '[:alnum:]')
+        fi
+        local frame_path="$frames_dir/${hash}.png"
+        
+        if [[ ! -f "$frame_path" ]]; then
+            if command -v ffmpeg &>/dev/null; then
+                # -ss 0 for fast seek, -an to ignore audio, -vframes 1 for a single frame
+                # try hardware then software, completely silent
+                ffmpeg -y -ss 0 -hwaccel auto -i "$imgpath" -an -vframes 1 "$frame_path" &>/dev/null || \
+                ffmpeg -y -ss 0 -hwaccel none -i "$imgpath" -an -vframes 1 "$frame_path" &>/dev/null || true
+            fi
+        fi
+        
+        if [[ -f "$frame_path" ]]; then
+            actual_img="$frame_path"
+        fi
+    fi
+
     # Resolve mode from GNOME settings when not provided
     if [[ -z "$mode" ]]; then
         local current
@@ -125,7 +153,7 @@ switch() {
 
     # Build args for Python generate_colors_material.py
     local -a py_args=(
-        --path "$imgpath"
+        --path "$actual_img"
         --mode "$mode"
         --scheme "$scheme_type"
         --termscheme "$TERMINAL_SCHEME"
@@ -137,7 +165,7 @@ switch() {
     generate_colors "${py_args[@]}" || true
 
     # -- 3. Run matugen templates (user define matugen templates) --
-    run_matugen_templates "$imgpath" "$mode" "$scheme_type"
+    run_matugen_templates "$actual_img" "$mode" "$scheme_type"
 
     # -- 4. Apply terminal escape sequences --
     if [[ -f "$SCRIPT_DIR/applycolor.sh" ]]; then

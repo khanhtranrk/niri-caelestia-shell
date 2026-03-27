@@ -7,12 +7,15 @@ import Caelestia.Models
 import Quickshell
 import Quickshell.Widgets
 import QtQuick
+import QtQuick.Effects
 
 Item {
     id: root
 
     required property FileSystemEntry modelData
     required property PersistentProperties visibilities
+
+    readonly property bool isVideo: Wallpapers.isPathVideo(modelData.path)
 
     scale: 0.5
     opacity: 0
@@ -59,19 +62,36 @@ Item {
 
         MaterialIcon {
             anchors.centerIn: parent
-            text: "image"
+            text: root.isVideo ? "movie" : "image"
             color: Colours.tPalette.m3outline
             font.pointSize: Appearance.font.size.headlineLarge * 2
             font.weight: 600
         }
 
         CachingImage {
-            path: root.modelData.path
+            path: Wallpapers.getColorSource(root.modelData.path)
             smooth: !root.PathView.view.moving
             sourceSize.width: image.implicitWidth * 2
             sourceSize.height: image.implicitHeight * 2
 
             anchors.fill: parent
+        }
+
+        // Play symbol overlay for videos
+        MaterialIcon {
+            anchors.centerIn: parent
+            anchors.horizontalCenterOffset: font.pointSize * 0.1 // Adjust for play icon visual centering
+            text: "play_arrow"
+            color: "white"
+            font.pointSize: Appearance.font.size.headlineLarge * 2
+            visible: root.isVideo
+
+            layer.enabled: true
+            layer.effect: MultiEffect {
+                shadowEnabled: true
+                shadowColor: Qt.alpha("black", 0.5)
+                blurMax: 12
+            }
         }
     }
 

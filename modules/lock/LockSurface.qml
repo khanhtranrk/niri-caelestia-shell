@@ -191,7 +191,12 @@ WlSessionLockSurface {
     Image {
         id: wallpaperFallback
         anchors.fill: parent
-        source: Wallpapers.current || Config.paths.wallpaper || ""
+        source: {
+            const path = Wallpapers.current || Config.paths.wallpaper || "";
+            if (!path) return "";
+            const source = Wallpapers.getColorSource(path);
+            return source.startsWith("/") ? "file://" + source : source;
+        }
         fillMode: Image.PreserveAspectCrop
         sourceSize.width: root.screen.width
         sourceSize.height: root.screen.height

@@ -24,6 +24,7 @@ class FileSystemEntry : public QObject {
     Q_PROPERTY(qint64 size READ size CONSTANT)
     Q_PROPERTY(bool isDir READ isDir CONSTANT)
     Q_PROPERTY(bool isImage READ isImage CONSTANT)
+    Q_PROPERTY(bool isVideo READ isVideo CONSTANT)
     Q_PROPERTY(QString mimeType READ mimeType CONSTANT)
 
 public:
@@ -33,6 +34,7 @@ public:
         , m_path(path)
         , m_relativePath(relativePath)
         , m_isImageInitialised(false)
+        , m_isVideoInitialised(false)
         , m_mimeTypeInitialised(false) {}
 
     [[nodiscard]] QString path() const { return m_path; };
@@ -53,6 +55,14 @@ public:
         return m_isImage;
     }
 
+    [[nodiscard]] bool isVideo() {
+        if (!m_isVideoInitialised) {
+            m_isVideo = mimeType().startsWith("video/");
+            m_isVideoInitialised = true;
+        }
+        return m_isVideo;
+    }
+
     [[nodiscard]] QString mimeType() {
         if (!m_mimeTypeInitialised) {
             const QMimeDatabase db;
@@ -70,6 +80,9 @@ private:
 
     bool m_isImage;
     bool m_isImageInitialised;
+
+    bool m_isVideo;
+    bool m_isVideoInitialised;
 
     QString m_mimeType;
     bool m_mimeTypeInitialised;
@@ -93,6 +106,8 @@ public:
     enum Filter {
         NoFilter,
         Images,
+        Videos,
+        ImagesAndVideos,
         Files,
         Dirs
     };

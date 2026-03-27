@@ -2,6 +2,7 @@ pragma Singleton
 
 import qs.config
 import qs.utils
+import Caelestia
 import Caelestia.Models
 import Quickshell
 import Quickshell.Io
@@ -20,12 +21,84 @@ Searcher {
     property bool previewColourLock
     property bool initialized: false
 
+    property string _pendingWallpaper: ""
+    
+    signal frameReady(string path)
+
     function setWallpaper(path: string): void {
+        if (isPathVideo(path)) {
+            const framePath = getColorSource(path);
+            // Check if frame already exists to avoid re-extraction
+            if (CUtils.exists(framePath)) {
+                console.log("Video frame already exists, applying immediately");
+                applyWallpaper(path);
+            } else {
+                console.log("Extracting frame for video wallpaper:", path);
+                _pendingWallpaper = path;
+                
+                // Use bash to ensure directory exists before ffmpeg runs, with software fallback
+                extractFrameProcess.command = [
+                    "bash", "-c", 
+                    "mkdir -p \"$(dirname \"$2\")\" && (ffmpeg -y -ss 0 -hwaccel auto -loglevel error -i \"$1\" -an -vframes 1 -update 1 \"$2\" || ffmpeg -y -ss 0 -hwaccel none -loglevel error -i \"$1\" -an -vframes 1 -update 1 \"$2\")",
+                    "--", path, framePath
+                ];
+                console.log("Running extraction command:", JSON.stringify(extractFrameProcess.command));
+                extractFrameProcess.running = true;
+            }
+        } else {
+            applyWallpaper(path);
+        }
+    }
+
+    function applyWallpaper(path: string): void {
         actualCurrent = path;
         // Ensure state directory exists, then save
         ensureStateDir.running = true;
-        // Run color generation from wallpaper
-        runColorGeneration(path);
+        
+        // Small delay to ensure filesystem sync before color generation starts
+        Qt.callLater(() => {
+            runColorGeneration(path);
+        });
+    }
+
+    // Dedicated process for sequential frame extraction
+    Process {
+        id: extractFrameProcess
+
+        onExited: (exitCode) => {
+            if (exitCode === 0) {
+                console.log("Frame extraction successful, applying wallpaper");
+                const path = root._pendingWallpaper;
+                root.frameReady(path);
+                root.applyWallpaper(path);
+            } else {
+                console.error("Frame extraction failed with code:", exitCode);
+                // Fallback: apply anyway, though colors might fail
+                root.applyWallpaper(root._pendingWallpaper);
+            }
+            root._pendingWallpaper = "";
+        }
+
+        stderr: SplitParser {
+            onRead: data => {
+                // Keep stderr for real errors but hide the verbose info
+                if (data.includes("Error") || data.includes("failed"))
+                    console.warn("Extraction error:", data);
+            }
+        }
+    }
+
+    function isPathVideo(path: string): bool {
+        if (!path) return false;
+        const p = path.toString().toLowerCase();
+        return p.endsWith(".mp4") || p.endsWith(".mkv") || p.endsWith(".webm") ||
+               p.endsWith(".mov") || p.endsWith(".avi") || p.endsWith(".m4v");
+    }
+
+    function getColorSource(path: string): string {
+        if (!isPathVideo(path)) return path;
+        const hash = Qt.md5(path.toString());
+        return `${Paths.state}/generated/video_frames/${hash}.png`;
     }
 
     // Convert variant name to matugen type
@@ -79,12 +152,10 @@ Searcher {
     }
 
     function loadFromConfig(): void {
-        console.log("loadFromConfig called");
-        console.log("Config.paths.wallpaper:", Config.paths.wallpaper);
-        console.log("actualCurrent before:", actualCurrent);
         if (!actualCurrent && Config.paths.wallpaper) {
-            actualCurrent = Paths.absolutePath(Config.paths.wallpaper);
-            console.log("actualCurrent after:", actualCurrent);
+            const path = Paths.absolutePath(Config.paths.wallpaper);
+            console.log("Loading initial wallpaper from config:", path);
+            setWallpaper(path);
         }
     }
 
@@ -156,19 +227,17 @@ Searcher {
         id: colorGenProcess
 
         onExited: (exitCode, exitStatus) => {
-            if (exitCode === 0) {
-                console.log("Color generation completed successfully");
-            } else {
+            if (exitCode !== 0) {
                 console.warn("Color generation exited with code:", exitCode);
             }
         }
 
-        stdout: SplitParser {
-            onRead: data => console.log("Color gen:", data)
-        }
-
         stderr: SplitParser {
-            onRead: data => console.warn("Color gen error:", data)
+            onRead: data => {
+                // Suppress successful theme update messages that are sent to stderr
+                if (!data.includes("theme updated") && !data.includes("SVG colors"))
+                    console.warn("Color gen error:", data);
+            }
         }
     }
 
@@ -180,7 +249,8 @@ Searcher {
         onLoaded: {
             const loadedPath = text().trim();
             if (loadedPath) {
-                root.actualCurrent = loadedPath;
+                console.log("Loading initial wallpaper from state:", loadedPath);
+                root.setWallpaper(loadedPath);
             } else {
                 root.loadFromConfig();
             }
@@ -194,6 +264,6 @@ Searcher {
 
         recursive: true
         path: Paths.wallsdir
-        filter: FileSystemModel.Images
+        filter: FileSystemModel.ImagesAndVideos
     }
 }

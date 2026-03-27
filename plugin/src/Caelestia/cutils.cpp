@@ -119,6 +119,10 @@ bool CUtils::deleteFile(const QUrl& path) const {
     return QFile::remove(path.toLocalFile());
 }
 
+bool CUtils::exists(const QString& path) const {
+    return QFile::exists(path);
+}
+
 QString CUtils::toLocalFile(const QUrl& url) const {
     if (!url.isLocalFile()) {
         qWarning() << "CUtils::toLocalFile: given url is not a local file" << url;
