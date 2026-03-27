@@ -8,6 +8,7 @@ import qs.components.images
 import qs.services
 import qs.config
 import QtQuick
+import QtQuick.Effects
 
 GridView {
     id: root
@@ -29,6 +30,7 @@ GridView {
     }
 
     delegate: Item {
+        id: rootDelegate
         required property var modelData
         required property int index
 
@@ -36,6 +38,7 @@ GridView {
         height: root.cellHeight
 
         readonly property bool isCurrent: modelData && modelData.path === Wallpapers.actualCurrent
+        readonly property bool isVideo: Wallpapers.isPathVideo(modelData.path)
         readonly property real itemMargin: Appearance.spacing.lg / 2
         readonly property real itemRadius: Appearance.rounding.normal
 
@@ -69,7 +72,7 @@ GridView {
             CachingImage {
                 id: cachingImage
 
-                path: modelData.path
+                path: Wallpapers.getColorSource(modelData.path)
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
                 cache: true
@@ -88,12 +91,29 @@ GridView {
                 }
             }
 
+            // Play symbol overlay for videos
+            MaterialIcon {
+                anchors.centerIn: parent
+                anchors.horizontalCenterOffset: font.pointSize * 0.1
+                text: "play_arrow"
+                color: "white"
+                font.pointSize: Appearance.font.size.headlineLarge * 2
+                visible: rootDelegate.isVideo
+
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    shadowEnabled: true
+                    shadowColor: Qt.alpha("black", 0.5)
+                    blurMax: 12
+                }
+            }
+
             // Fallback if CachingImage fails to load
             Image {
                 id: fallbackImage
 
                 anchors.fill: parent
-                source: fallbackTimer.triggered && cachingImage.status !== Image.Ready ? modelData.path : ""
+                source: fallbackTimer.triggered && cachingImage.status !== Image.Ready ? Wallpapers.getColorSource(modelData.path) : ""
                 asynchronous: true
                 fillMode: Image.PreserveAspectCrop
                 cache: true
