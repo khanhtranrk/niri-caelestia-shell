@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# setup.sh — interactive installer for caelestia-sddm-theme
+# setup.sh — interactive installer for niri-caelestia-sddm
 
 set -e
-THEME_NAME="caelestia-sddm-theme"
+THEME_NAME="niri-caelestia-sddm"
 THEME_INSTALL_DIR="/usr/share/sddm/themes/$THEME_NAME"
 REAL_USER="${SUDO_USER:-$USER}"                          
 REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)   
@@ -17,7 +17,7 @@ die()  { echo -e "${RED}[✗]${NC} $*"; exit 1; }
 
 echo ""
 echo -e "${CYAN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${CYAN}${BOLD}  caelestia-sddm-theme installer${NC}"
+echo -e "${CYAN}${BOLD}  niri-caelestia-sddm installer${NC}"
 echo -e "${CYAN}  SDDM theme matching niri-caelestia-shell lockscreen${NC}"
 echo -e "${CYAN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo ""

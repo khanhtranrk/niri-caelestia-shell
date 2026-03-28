@@ -1,4 +1,4 @@
-// caelestia-sddm-theme — Main.qml
+// niri-caelestia-sddm — Main.qml
 // Faithful port of niri-caelestia-shell Center.qml / LockSurface.qml
 
 import QtQuick

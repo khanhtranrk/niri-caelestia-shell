@@ -1,4 +1,4 @@
-# caelestia-sddm-theme
+# niri-caelestia-sddm
 
 An SDDM theme that matches the **niri-caelestia-shell** lockscreen — so your login screen and desktop lockscreen look identical.
 
@@ -38,8 +38,8 @@ Fonts used (already in your shell setup):
 ## Installation
 
 ```bash
-git clone https://github.com/yourname/caelestia-sddm-theme
-cd caelestia-sddm-theme
+git clone https://github.com/yourname/niri-caelestia-sddm
+cd niri-caelestia-sddm
 ./setup.sh
 ```
 
@@ -49,25 +49,25 @@ The script detects whether you have Matugen and walks you through the right mode
 
 ```bash
 # 1. Copy theme
-sudo mkdir -p /usr/share/sddm/themes/caelestia-sddm-theme
-sudo cp -r . /usr/share/sddm/themes/caelestia-sddm-theme/
+sudo mkdir -p /usr/share/sddm/themes/niri-caelestia-sddm
+sudo cp -r . /usr/share/sddm/themes/niri-caelestia-sddm/
 
 # 2. Copy config files
-mkdir -p ~/.config/caelestia-sddm-theme
-cp Matugen/SddmColors.qml ~/.config/caelestia-sddm-theme/
-cp Matugen/Colors.qml     ~/.config/caelestia-sddm-theme/
-cp Matugen/sddm-theme-apply.sh ~/.config/caelestia-sddm-theme/
-cp Components/Settings.qml    ~/.config/caelestia-sddm-theme/
-chmod +x ~/.config/caelestia-sddm-theme/sddm-theme-apply.sh
+mkdir -p ~/.config/niri-caelestia-sddm
+cp Matugen/SddmColors.qml ~/.config/niri-caelestia-sddm/
+cp Matugen/Colors.qml     ~/.config/niri-caelestia-sddm/
+cp Matugen/sddm-theme-apply.sh ~/.config/niri-caelestia-sddm/
+cp Components/Settings.qml    ~/.config/niri-caelestia-sddm/
+chmod +x ~/.config/niri-caelestia-sddm/sddm-theme-apply.sh
 
 # 3. Configure /etc/sddm.conf
 sudo tee /etc/sddm.conf << CONF
 [Theme]
-Current=caelestia-sddm-theme
+Current=niri-caelestia-sddm
 CONF
 
 # 4. Apply initial colors
-sudo ~/.config/caelestia-sddm-theme/sddm-theme-apply.sh
+sudo ~/.config/niri-caelestia-sddm/sddm-theme-apply.sh
 ```
 
 ---
@@ -77,17 +77,17 @@ sudo ~/.config/caelestia-sddm-theme/sddm-theme-apply.sh
 Add to `~/.config/matugen/config.toml`:
 
 ```toml
-[templates.caelestia-sddm]
-input_path  = '~/.config/caelestia-sddm-theme/SddmColors.qml'
-output_path = '~/.config/caelestia-sddm-theme/Colors.qml'
-post_hook   = 'sudo ~/.config/caelestia-sddm-theme/sddm-theme-apply.sh &'
+[templates.niri-caelestia-sddm]
+input_path  = '~/.config/niri-caelestia-sddm/SddmColors.qml'
+output_path = '~/.config/niri-caelestia-sddm/Colors.qml'
+post_hook   = 'sudo ~/.config/niri-caelestia-sddm/sddm-theme-apply.sh &'
 ```
 
 Now whenever your shell regenerates colors (wallpaper change), SDDM colors update automatically too.
 
 For the passwordless sudo:
 ```bash
-echo "$USER ALL=(ALL) NOPASSWD: $HOME/.config/caelestia-sddm-theme/sddm-theme-apply.sh" \
+echo "$USER ALL=(ALL) NOPASSWD: $HOME/.config/niri-caelestia-sddm/sddm-theme-apply.sh" \
     | sudo tee /etc/sudoers.d/caelestia-sddm-$USER
 sudo chmod 0440 /etc/sudoers.d/caelestia-sddm-$USER
 ```
@@ -96,7 +96,7 @@ sudo chmod 0440 /etc/sudoers.d/caelestia-sddm-$USER
 
 ## Customization
 
-Edit `~/.config/caelestia-sddm-theme/Settings.qml`:
+Edit `~/.config/niri-caelestia-sddm/Settings.qml`:
 
 ```qml
 readonly property string wallpaperPath: "/home/user/Pictures/Wallpapers/wall.jpg"
@@ -109,7 +109,7 @@ readonly property int    animDuration:  280
 
 Then apply:
 ```bash
-sudo ~/.config/caelestia-sddm-theme/sddm-theme-apply.sh
+sudo ~/.config/niri-caelestia-sddm/sddm-theme-apply.sh
 ```
 
 ---
@@ -119,7 +119,7 @@ sudo ~/.config/caelestia-sddm-theme/sddm-theme-apply.sh
 ```bash
 ./test.sh
 # or
-sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia-sddm-theme
+sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/niri-caelestia-sddm
 ```
 
 ---
@@ -127,7 +127,7 @@ sddm-greeter-qt6 --test-mode --theme /usr/share/sddm/themes/caelestia-sddm-theme
 ## File structure
 
 ```
-caelestia-sddm-theme/
+niri-caelestia-sddm/
 ├── Main.qml                    ← entry point
 ├── metadata.desktop
 ├── theme.conf
@@ -148,7 +148,7 @@ caelestia-sddm-theme/
 │   ├── SddmColors.qml          ← Matugen input template
 │   ├── Colors.qml              ← default palette (fallback)
 │   ├── matugen-config.toml     ← snippet to add to your matugen config
-│   └── sddm-theme-apply.sh     ← copy to ~/.config/caelestia-sddm-theme/
+│   └── sddm-theme-apply.sh     ← copy to ~/.config/niri-caelestia-sddm/
 ├── noMatugen/
 │   ├── Colors.qml              ← same default palette
 │   ├── Settings.qml            ← same Settings template

@@ -1,5 +1,5 @@
 // SddmColors.qml — Matugen template
-// Place in ~/.config/caelestia-sddm-theme/SddmColors.qml
+// Place in ~/.config/niri-caelestia-sddm/SddmColors.qml
 // Matugen will fill in color placeholders and write Colors.qml
 
 // {{image}}

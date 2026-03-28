@@ -32,7 +32,7 @@ if [ -z "$USER_HOME" ] || [ ! -d "$USER_HOME" ]; then
 fi
 
 # --- Directories ---
-THEME_NAME="caelestia-sddm-theme"
+THEME_NAME="niri-caelestia-sddm"
 THEME_DIR="/usr/share/sddm/themes/$THEME_NAME"
 CONFIG_DIR="$USER_HOME/.config/$THEME_NAME"
 

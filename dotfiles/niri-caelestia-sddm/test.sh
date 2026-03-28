@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# test.sh — preview caelestia-sddm-theme without locking your session
+# test.sh — preview niri-caelestia-sddm without locking your session
 # Creates a temporary theme copy with patched properties — never touches source files.
 
 THEME_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -13,7 +13,7 @@ die()  { echo -e "${RED}[✗]${NC} $*"; exit 1; }
 
 usage() {
 cat << HELP
-${BOLD}caelestia-sddm-theme test runner${NC}
+${BOLD}niri-caelestia-sddm test runner${NC}
   Usage: ./test.sh [OPTIONS]
 
 Options:
@@ -48,7 +48,7 @@ command -v sddm-greeter-qt6 &>/dev/null || die "sddm-greeter-qt6 not found. Plea
 # ── Auto-detect wallpaper ─────────────────────────────────────────────────
 if [[ -z "$WALLPAPER" ]]; then
     # Try theme config hint
-    WP_HINT="$HOME/.config/caelestia-sddm-theme/Colors.qml"
+    WP_HINT="$HOME/.config/niri-caelestia-sddm/Colors.qml"
     if [[ -f "$WP_HINT" ]]; then
         WALLPAPER=$(sed -n '5p' "$WP_HINT" | sed 's/^\/\/\s*//' | xargs)
         WALLPAPER="${WALLPAPER/#\~/$HOME}"
@@ -68,7 +68,7 @@ TMP_THEME=$(mktemp -d /tmp/caelestia-sddm-test.XXXXXX)
 cp -r "$THEME_DIR/." "$TMP_THEME/"
 
 # Copy user config if available
-CONFIG_DIR="$HOME/.config/caelestia-sddm-theme"
+CONFIG_DIR="$HOME/.config/niri-caelestia-sddm"
 if [[ -d "$CONFIG_DIR" ]]; then
     cp -f "$CONFIG_DIR/Colors.qml" "$TMP_THEME/Components/Colors.qml" 2>/dev/null || true
     cp -f "$CONFIG_DIR/Settings.qml" "$TMP_THEME/Components/Settings.qml" 2>/dev/null || true
@@ -114,7 +114,7 @@ trap cleanup EXIT INT TERM
 
 # ── Run Greeter ───────────────────────────────────────────────────────────
 echo -e "${CYAN}${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BOLD}  caelestia-sddm-theme — Qt6 Test Mode${NC}"
+echo -e "${BOLD}  niri-caelestia-sddm — Qt6 Test Mode${NC}"
 echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "  User       : ${BLUE}$TEST_USER${NC}"
 echo -e "  Blur       : $( $NO_BLUR && echo -e "${RED}Off${NC}" || echo -e "${GREEN}On (radius $BLUR_R)${NC}" )"
