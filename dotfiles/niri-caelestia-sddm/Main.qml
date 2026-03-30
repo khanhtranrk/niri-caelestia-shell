@@ -190,7 +190,7 @@ Rectangle {
             delegate: Rectangle {
                 width: charList.implicitHeight
                 height: charList.implicitHeight
-                radius: width / 4
+                radius: width / 2
                 color: root.m3onSurface
                 scale: 0
                 opacity: 0
