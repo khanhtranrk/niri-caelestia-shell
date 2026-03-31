@@ -7,7 +7,7 @@ environment {
     QT_QPA_PLATFORM "wayland"
     ELECTRON_OZONE_PLATFORM_HINT "auto"
     QT_QPA_PLATFORMTHEME "kde"
-    QT_STYLE_OVERRIDE "Darkly"
+    QT_STYLE_OVERRIDE "kvantum"
     // Firefox
     MOZ_ENABLE_WAYLAND "1"
     // SDL
