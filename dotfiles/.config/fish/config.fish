@@ -24,6 +24,19 @@ if status is-interactive # Commands to run in interactive sessions can go here
     alias clear "printf '\033[2J\033[3J\033[1;1H'" # fix: kitty doesn't clear properly
     alias celar "printf '\033[2J\033[3J\033[1;1H'"
     alias claer "printf '\033[2J\033[3J\033[1;1H'"
-    alias q 'qs -c niri-caelestia-shell'
+    alias pamcan pacman
+    alias q 'qs -c ii'
+
+
+    # eza replacements for ls
+    alias la 'eza -al --color=always --group-directories-first --icons'
+    alias ls 'eza -a --color=always --group-directories-first --icons'
+    alias ll 'eza -l --color=always --group-directories-first --icons'
+    alias lt 'eza -aT --color=always --group-directories-first --icons'
+    alias l. 'eza -ald --color=always --group-directories-first --icons .*'
+
+    alias dir 'dir --color=auto'
+    alias grep 'ugrep --color=auto'
+    alias cat 'bat'
     
 end

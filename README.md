@@ -22,15 +22,15 @@ https://github.com/user-attachments/assets/0840f496-575c-4ca6-83a8-87bb01a85c5f
 
 | App Launcher | Clipboard |
 |:---:|:---:|
-| ![App Launcher](images/app_launcher.png) | ![Clipboard](images/clipboard.png) |
+| ![App Launcher](images/screenshorts/app_launcher.png) | ![Clipboard](images/screenshorts/clipboard.png) |
 
 | Quick Toggles | Weather |
 |:---:|:---:|
-| ![Quick Toggles](images/quicktoggles.png) | ![Weather](images/weather.png) |
+| ![Quick Toggles](images/screenshorts/quicktoggles.png) | ![Weather](images/screenshorts/weather.png) |
 
 | Niri Things | Dashboard |
 |:---:|:--:|
-| ![Niri Things](images/niriThings.png) | ![Dashboard](images/dashboard.png) |
+| ![Niri Things](images/screenshorts/niriThings.png) | ![Dashboard](images/screenshorts/dashboard.png) |
 
 </div>
 
@@ -105,8 +105,17 @@ Then simply build and install using `cmake`.
 
 ## ⚡ Installation
 
-> [!NOTE]
-> There is **NO** package manager installation support yet because... 🤔
+
+### Single Command Installation (Arch Linux)
+
+For a fully automated installation including all dependencies, system configuration, and building the shell:
+
+```sh
+git clone https://github.com/Ayushkr2003/niri-caelestia-shell && cd niri-caelestia-shell && ./scripts/setup/v2/setup install
+```
+
+> [!WARNING]
+> This automated installer is currently in beta and may contain bugs. I am still working on refining the process! If you encounter issues, please use the Manual Build steps below.
 
 ### Manual Build
 
@@ -137,6 +146,22 @@ Then simply build and install using `cmake`.
     ```
 
     > The setup script supports flags: `--skip-deps`, `--skip-python`, `--skip-services`
+
+5. Deploy dotfiles:
+
+    ```sh
+    cp -r dotfiles/.config/* ~/.config/
+    ```
+
+    > [!IMPORTANT]
+    > Copying the `matugen` folder to `~/.config/` is **mandatory** for system-wide color syncing to work.
+
+6. (Optional) Setup SDDM Theme:
+
+    ```sh
+    bash dotfiles/niri-caelestia-sddm/setup.sh
+    ```
+    > Select option `1` during setup to sync colors directly with the shell.
 
 <!-- 
     
@@ -170,7 +195,7 @@ Detailed prerequisites and step-by-step setup for wallpaper-driven theming are p
 ## 🚀 Usage
 
 The shell can be started via the `qs -c niri-caelestia-shell` on your preferred terminal.
-><sub> (`qs` and `quickshell` are interchangable.) </sub>
+<sub> (`qs` and `quickshell` are interchangable.) </sub>
 
 
 * Example line for niri `config.kdl` to launch the shell at startup:
@@ -181,7 +206,6 @@ The shell can be started via the `qs -c niri-caelestia-shell` on your preferred 
 
 ### Custom Shortcuts/IPC
 
-// ...existing code...
 
 All IPC commands can be called via `quickshell -c niri-caelestia-shell ipc call ...`
 
