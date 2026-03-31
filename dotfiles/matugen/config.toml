@@ -25,3 +25,10 @@ output_path = '~/.local/state/quickshell/user/generated/wallpaper/path.txt'
 input_path='~/.config/matugen/templates/niri.kdl'
 output_path='~/.config/niri/colors.kdl'
 
+[templates.mpv]
+input_path = '~/.config/matugen/templates/mpv/mpv.conf'
+output_path = '~/.config/mpv/script-opts/niri_caelestia.conf'
+
+[templates.btop]
+input_path = '~/.config/matugen/templates/btop/btop.theme'
+output_path = '~/.config/btop/themes/niri_caelestia.theme'
