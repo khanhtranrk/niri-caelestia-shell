@@ -149,9 +149,3 @@ in
       mainProgram = "caelestia-shell";
     };
   }
-   };
-  }
-
-  }
-   };
-  }
