@@ -32,6 +32,7 @@
   debug ? false,
   withCli ? false,
   extraRuntimeDeps ? [],
+  ...
 }: let
   version = "1.0.0";
 
