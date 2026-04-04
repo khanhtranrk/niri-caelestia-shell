@@ -173,25 +173,35 @@ Singleton {
 
         // Helper to update the mode while preserving other state
         function setMode(mode: string): void {
+            let currentState = {
+                name: "dynamic",
+                flavour: "default",
+                mode: mode,
+                variant: "tonalspot",
+                colours: {}
+            };
             try {
-                const currentState = JSON.parse(text());
-                currentState.mode = mode;
-                root.saveSchemeState(
-                    currentState.name,
-                    currentState.flavour,
-                    mode,
-                    currentState.variant,
-                    currentState.colours
-                );
-                // Update local state
-                if (mode === "light") {
-                    root.currentLight = true;
-                } else {
-                    root.currentLight = false;
+                const t = text();
+                if (t && t.trim().length > 0) {
+                    const parsed = JSON.parse(t);
+                    if (parsed && typeof parsed === 'object') {
+                        currentState = parsed;
+                        currentState.mode = mode;
+                    }
                 }
             } catch (e) {
-                console.error("Failed to set mode:", e);
+                console.warn("Failed to parse existing mode state, using default dynamic scheme:", e);
             }
+
+            root.saveSchemeState(
+                currentState.name,
+                currentState.flavour,
+                mode,
+                currentState.variant,
+                currentState.colours || {}
+            );
+            // Update local state
+            root.currentLight = (mode === "light");
         }
     }
 

@@ -18,6 +18,7 @@ CollapsibleSection {
         checked: !Colours.currentLight
         onToggled: checked => {
             Colours.setMode(checked ? "dark" : "light");
+            Schemes.regenerateDynamic();
         }
     }
 }
