@@ -36,7 +36,7 @@ Item {
         Config.lock.sizes.centerWidth = root.centerWidth;
         Config.lock.sizes.heightMult = root.heightMult;
         Config.lock.sizes.ratio = root.ratio;
-        Config.save();
+        Config.markDirty("lock");
     }
 
     ClippingRectangle {

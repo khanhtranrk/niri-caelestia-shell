@@ -79,7 +79,7 @@ DeviceDetails {
                             }
 
                             Config.utilities.vpn.provider = providers;
-                            Config.save();
+                            Config.markDirty("utilities");
                         }
                     }
 
@@ -131,7 +131,7 @@ DeviceDetails {
                                     }
                                 }
                                 Config.utilities.vpn.provider = providers;
-                                Config.save();
+                                Config.markDirty("utilities");
                                 root.session.vpn.active = null;
                             }
                         }
@@ -386,7 +386,7 @@ DeviceDetails {
                         }
 
                         Config.utilities.vpn.provider = providers;
-                        Config.save();
+                        Config.markDirty("utilities");
                         editVpnDialog.closeWithAnimation();
                     }
                 }

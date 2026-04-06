@@ -40,7 +40,7 @@ Item {
         Config.notifs.sizes.width = root.popupWidth;
         Config.notifs.sizes.image = root.imageSize;
         Config.notifs.sizes.badge = root.badgeSize;
-        Config.save();
+        Config.markDirty("notifs");
     }
 
     ClippingRectangle {

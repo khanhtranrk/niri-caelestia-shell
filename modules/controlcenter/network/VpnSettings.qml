@@ -37,7 +37,7 @@ ColumnLayout {
             checked: Config.utilities.vpn.enabled
             toggle.onToggled: {
                 Config.utilities.vpn.enabled = checked;
-                Config.save();
+                Config.markDirty("utilities");
             }
         }
     }
@@ -125,14 +125,14 @@ ColumnLayout {
                                     providers[index] = providers[index + 1];
                                     providers[index + 1] = temp;
                                     Config.utilities.vpn.provider = providers;
-                                    Config.save();
+                                    Config.markDirty("utilities");
                                 } else if (!modelData.isActive) {
                                     // Make active (move to top)
                                     const providers = [...Config.utilities.vpn.provider];
                                     const provider = providers.splice(index, 1)[0];
                                     providers.unshift(provider);
                                     Config.utilities.vpn.provider = providers;
-                                    Config.save();
+                                    Config.markDirty("utilities");
                                 }
                             }
                         }
@@ -143,7 +143,7 @@ ColumnLayout {
                                 const providers = [...Config.utilities.vpn.provider];
                                 providers.splice(index, 1);
                                 Config.utilities.vpn.provider = providers;
-                                Config.save();
+                                Config.markDirty("utilities");
                             }
                         }
                     }
@@ -189,7 +189,7 @@ ColumnLayout {
                     interface: "wt0"
                 });
                 Config.utilities.vpn.provider = providers;
-                Config.save();
+                Config.markDirty("utilities");
             }
         }
 
@@ -207,7 +207,7 @@ ColumnLayout {
                     interface: "tailscale0"
                 });
                 Config.utilities.vpn.provider = providers;
-                Config.save();
+                Config.markDirty("utilities");
             }
         }
 
@@ -225,7 +225,7 @@ ColumnLayout {
                     interface: "CloudflareWARP"
                 });
                 Config.utilities.vpn.provider = providers;
-                Config.save();
+                Config.markDirty("utilities");
             }
         }
     }

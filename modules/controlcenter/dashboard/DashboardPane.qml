@@ -57,7 +57,7 @@ Item {
         Config.dashboard.performance.showStorage = root.showStorage;
         Config.dashboard.performance.showNetwork = root.showNetwork;
         // Note: sizes properties are readonly and cannot be modified
-        Config.save();
+        Config.markDirty("dashboard");
     }
 
     ClippingRectangle {

@@ -76,7 +76,7 @@ ColumnLayout {
             checked: Config.utilities.vpn.enabled
             toggle.onToggled: {
                 Config.utilities.vpn.enabled = checked;
-                Config.save();
+                Config.markDirty("utilities");
             }
         }
 

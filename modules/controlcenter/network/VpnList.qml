@@ -43,7 +43,7 @@ ColumnLayout {
                     }
                 }
                 Config.utilities.vpn.provider = providers;
-                Config.save();
+                Config.markDirty("utilities");
 
                 Qt.callLater(function () {
                     VPN.toggle();
@@ -208,7 +208,7 @@ ColumnLayout {
                                             }
                                         }
                                         Config.utilities.vpn.provider = providers;
-                                        Config.save();
+                                        Config.markDirty("utilities");
 
                                         Qt.callLater(function () {
                                             VPN.toggle();
@@ -243,7 +243,7 @@ ColumnLayout {
                                     }
                                 }
                                 Config.utilities.vpn.provider = providers;
-                                Config.save();
+                                Config.markDirty("utilities");
                             }
                         }
 
@@ -471,7 +471,7 @@ ColumnLayout {
                             interface: "wt0"
                         });
                         Config.utilities.vpn.provider = providers;
-                        Config.save();
+                        Config.markDirty("utilities");
                         vpnDialog.closeWithAnimation();
                     }
                 }
@@ -492,7 +492,7 @@ ColumnLayout {
                             interface: "tailscale0"
                         });
                         Config.utilities.vpn.provider = providers;
-                        Config.save();
+                        Config.markDirty("utilities");
                         vpnDialog.closeWithAnimation();
                     }
                 }
@@ -513,7 +513,7 @@ ColumnLayout {
                             interface: "CloudflareWARP"
                         });
                         Config.utilities.vpn.provider = providers;
-                        Config.save();
+                        Config.markDirty("utilities");
                         vpnDialog.closeWithAnimation();
                     }
                 }
@@ -675,7 +675,7 @@ ColumnLayout {
                             }
 
                             Config.utilities.vpn.provider = providers;
-                            Config.save();
+                            Config.markDirty("utilities");
                             vpnDialog.closeWithAnimation();
                         }
                     }

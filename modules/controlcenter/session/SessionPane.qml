@@ -30,7 +30,7 @@ Item {
         Config.session.vimKeybinds = root.vimKeybinds;
         Config.session.dragThreshold = root.dragThreshold;
         Config.session.sizes.button = root.buttonSize;
-        Config.save();
+        Config.markDirty("session");
     }
 
     ClippingRectangle {

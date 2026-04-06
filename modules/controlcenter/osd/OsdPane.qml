@@ -34,7 +34,7 @@ Item {
         Config.osd.enableMicrophone = root.enableMicrophone;
         Config.osd.sizes.sliderWidth = root.sliderWidth;
         Config.osd.sizes.sliderHeight = root.sliderHeight;
-        Config.save();
+        Config.markDirty("osd");
     }
 
     ClippingRectangle {

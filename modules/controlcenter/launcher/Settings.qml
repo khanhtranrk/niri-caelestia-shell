@@ -34,7 +34,7 @@ ColumnLayout {
             checked: Config.launcher.enabled
             toggle.onToggled: {
                 Config.launcher.enabled = checked;
-                Config.save();
+                Config.markDirty("launcher");
             }
         }
 
@@ -43,7 +43,7 @@ ColumnLayout {
             checked: Config.launcher.showOnHover
             toggle.onToggled: {
                 Config.launcher.showOnHover = checked;
-                Config.save();
+                Config.markDirty("launcher");
             }
         }
 
@@ -52,7 +52,7 @@ ColumnLayout {
             checked: Config.launcher.vimKeybinds
             toggle.onToggled: {
                 Config.launcher.vimKeybinds = checked;
-                Config.save();
+                Config.markDirty("launcher");
             }
         }
 
@@ -61,7 +61,7 @@ ColumnLayout {
             checked: Config.launcher.enableDangerousActions
             toggle.onToggled: {
                 Config.launcher.enableDangerousActions = checked;
-                Config.save();
+                Config.markDirty("launcher");
             }
         }
     }
@@ -126,7 +126,7 @@ ColumnLayout {
             checked: Config.launcher.useFuzzy.apps
             toggle.onToggled: {
                 Config.launcher.useFuzzy.apps = checked;
-                Config.save();
+                Config.markDirty("launcher");
             }
         }
 
@@ -135,7 +135,7 @@ ColumnLayout {
             checked: Config.launcher.useFuzzy.actions
             toggle.onToggled: {
                 Config.launcher.useFuzzy.actions = checked;
-                Config.save();
+                Config.markDirty("launcher");
             }
         }
 
@@ -144,7 +144,7 @@ ColumnLayout {
             checked: Config.launcher.useFuzzy.schemes
             toggle.onToggled: {
                 Config.launcher.useFuzzy.schemes = checked;
-                Config.save();
+                Config.markDirty("launcher");
             }
         }
 
@@ -153,7 +153,7 @@ ColumnLayout {
             checked: Config.launcher.useFuzzy.variants
             toggle.onToggled: {
                 Config.launcher.useFuzzy.variants = checked;
-                Config.save();
+                Config.markDirty("launcher");
             }
         }
 
@@ -162,7 +162,7 @@ ColumnLayout {
             checked: Config.launcher.useFuzzy.wallpapers
             toggle.onToggled: {
                 Config.launcher.useFuzzy.wallpapers = checked;
-                Config.save();
+                Config.markDirty("launcher");
             }
         }
     }

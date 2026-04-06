@@ -19,270 +19,61 @@ CollapsibleSection {
     showBackground: true
 
     ColumnLayout {
-        spacing: Appearance.spacing.sm
+        spacing: Appearance.spacing.lg
         Layout.fillWidth: true
 
-    CollapsibleSection {
-        id: materialFontSection
-        title: qsTr("Material font family")
-        expanded: true
-        showBackground: true
-        nested: true
-
-        Loader {
-            id: materialFontLoader
+        FontDropdown {
             Layout.fillWidth: true
-            Layout.preferredHeight: item ? Math.min(item.contentHeight, 300) : 0
-            active: materialFontSection.expanded
-
-            sourceComponent: StyledListView {
-                id: materialFontList
-                property alias contentHeight: materialFontList.contentHeight
-
-                clip: true
-                spacing: Appearance.spacing.sm / 2
-                model: Qt.fontFamilies()
-
-                StyledScrollBar.vertical: StyledScrollBar {
-                    flickable: materialFontList
-                }
-
-                delegate: StyledRect {
-                    required property string modelData
-                    required property int index
-
-                    width: ListView.view.width
-
-                    readonly property bool isCurrent: modelData === rootPane.fontFamilyMaterial
-                    color: Qt.alpha(Colours.tPalette.m3surfaceContainer, isCurrent ? Colours.tPalette.m3surfaceContainer.a : 0)
-                    radius: Appearance.rounding.normal
-                    border.width: isCurrent ? 1 : 0
-                    border.color: Colours.palette.m3primary
-
-                    StateLayer {
-                        function onClicked(): void {
-                            rootPane.fontFamilyMaterial = modelData;
-                            rootPane.saveConfig();
-                        }
-                    }
-
-                    RowLayout {
-                        id: fontFamilyMaterialRow
-
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.margins: Appearance.padding.md
-
-                        spacing: Appearance.spacing.lg
-
-                        StyledText {
-                            text: modelData
-                            font.pointSize: Appearance.font.size.bodyMedium
-                        }
-
-                        Item {
-                            Layout.fillWidth: true
-                        }
-
-                        Loader {
-                            active: isCurrent
-
-                            sourceComponent: MaterialIcon {
-                                text: "check"
-                                color: Colours.palette.m3onSurfaceVariant
-                                font.pointSize: Appearance.font.size.titleMedium
-                            }
-                        }
-                    }
-
-                    implicitHeight: fontFamilyMaterialRow.implicitHeight + Appearance.padding.md * 2
-                }
-            }
-        }
-    }
-
-    CollapsibleSection {
-        id: monoFontSection
-        title: qsTr("Monospace font family")
-        expanded: false
-        showBackground: true
-        nested: true
-
-        Loader {
-            Layout.fillWidth: true
-            Layout.preferredHeight: item ? Math.min(item.contentHeight, 300) : 0
-            active: monoFontSection.expanded
-
-            sourceComponent: StyledListView {
-                id: monoFontList
-                property alias contentHeight: monoFontList.contentHeight
-
-                clip: true
-                spacing: Appearance.spacing.sm / 2
-                model: Qt.fontFamilies()
-
-                StyledScrollBar.vertical: StyledScrollBar {
-                    flickable: monoFontList
-                }
-
-                delegate: StyledRect {
-                    required property string modelData
-                    required property int index
-
-                    width: ListView.view.width
-
-                    readonly property bool isCurrent: modelData === rootPane.fontFamilyMono
-                    color: Qt.alpha(Colours.tPalette.m3surfaceContainer, isCurrent ? Colours.tPalette.m3surfaceContainer.a : 0)
-                    radius: Appearance.rounding.normal
-                    border.width: isCurrent ? 1 : 0
-                    border.color: Colours.palette.m3primary
-
-                    StateLayer {
-                        function onClicked(): void {
-                            rootPane.fontFamilyMono = modelData;
-                            rootPane.saveConfig();
-                        }
-                    }
-
-                    RowLayout {
-                        id: fontFamilyMonoRow
-
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.margins: Appearance.padding.md
-
-                        spacing: Appearance.spacing.lg
-
-                        StyledText {
-                            text: modelData
-                            font.pointSize: Appearance.font.size.bodyMedium
-                        }
-
-                        Item {
-                            Layout.fillWidth: true
-                        }
-
-                        Loader {
-                            active: isCurrent
-
-                            sourceComponent: MaterialIcon {
-                                text: "check"
-                                color: Colours.palette.m3onSurfaceVariant
-                                font.pointSize: Appearance.font.size.titleMedium
-                            }
-                        }
-                    }
-
-                    implicitHeight: fontFamilyMonoRow.implicitHeight + Appearance.padding.md * 2
-                }
-            }
-        }
-    }
-
-    CollapsibleSection {
-        id: sansFontSection
-        title: qsTr("Sans-serif font family")
-        expanded: false
-        showBackground: true
-        nested: true
-
-        Loader {
-            Layout.fillWidth: true
-            Layout.preferredHeight: item ? Math.min(item.contentHeight, 300) : 0
-            active: sansFontSection.expanded
-
-            sourceComponent: StyledListView {
-                id: sansFontList
-                property alias contentHeight: sansFontList.contentHeight
-
-                clip: true
-                spacing: Appearance.spacing.sm / 2
-                model: Qt.fontFamilies()
-
-                StyledScrollBar.vertical: StyledScrollBar {
-                    flickable: sansFontList
-                }
-
-                delegate: StyledRect {
-                    required property string modelData
-                    required property int index
-
-                    width: ListView.view.width
-
-                    readonly property bool isCurrent: modelData === rootPane.fontFamilySans
-                    color: Qt.alpha(Colours.tPalette.m3surfaceContainer, isCurrent ? Colours.tPalette.m3surfaceContainer.a : 0)
-                    radius: Appearance.rounding.normal
-                    border.width: isCurrent ? 1 : 0
-                    border.color: Colours.palette.m3primary
-
-                    StateLayer {
-                        function onClicked(): void {
-                            rootPane.fontFamilySans = modelData;
-                            rootPane.saveConfig();
-                        }
-                    }
-
-                    RowLayout {
-                        id: fontFamilySansRow
-
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.margins: Appearance.padding.md
-
-                        spacing: Appearance.spacing.lg
-
-                        StyledText {
-                            text: modelData
-                            font.pointSize: Appearance.font.size.bodyMedium
-                        }
-
-                        Item {
-                            Layout.fillWidth: true
-                        }
-
-                        Loader {
-                            active: isCurrent
-
-                            sourceComponent: MaterialIcon {
-                                text: "check"
-                                color: Colours.palette.m3onSurfaceVariant
-                                font.pointSize: Appearance.font.size.titleMedium
-                            }
-                        }
-                    }
-
-                    implicitHeight: fontFamilySansRow.implicitHeight + Appearance.padding.md * 2
-                }
-            }
-        }
-    }
-
-    SectionContainer {
-        contentSpacing: Appearance.spacing.lg
-
-        SliderInput {
-            Layout.fillWidth: true
-
-            label: qsTr("Font size scale")
-            value: rootPane.fontSizeScale
-            from: 0.7
-            to: 1.5
-            decimals: 2
-            suffix: "×"
-            validator: DoubleValidator {
-                bottom: 0.7
-                top: 1.5
-            }
-
-            onValueModified: newValue => {
-                rootPane.fontSizeScale = newValue;
+            label: qsTr("Material font family")
+            currentFont: rootPane.fontFamilyMaterial
+            onFontSelected: fontName => {
+                rootPane.fontFamilyMaterial = fontName;
                 rootPane.saveConfig();
             }
         }
-    }
 
-    } // end ColumnLayout wrapper
+        FontDropdown {
+            Layout.fillWidth: true
+            label: qsTr("Monospace font family")
+            currentFont: rootPane.fontFamilyMono
+            onFontSelected: fontName => {
+                rootPane.fontFamilyMono = fontName;
+                rootPane.saveConfig();
+            }
+        }
+
+        FontDropdown {
+            Layout.fillWidth: true
+            label: qsTr("Sans-serif font family")
+            currentFont: rootPane.fontFamilySans
+            onFontSelected: fontName => {
+                rootPane.fontFamilySans = fontName;
+                rootPane.saveConfig();
+            }
+        }
+
+        SectionContainer {
+            contentSpacing: Appearance.spacing.lg
+
+            SliderInput {
+                Layout.fillWidth: true
+
+                label: qsTr("Font size scale")
+                value: rootPane.fontSizeScale
+                from: 0.7
+                to: 1.5
+                decimals: 2
+                suffix: "×"
+                validator: DoubleValidator {
+                    bottom: 0.7
+                    top: 1.5
+                }
+
+                onValueModified: newValue => {
+                    rootPane.fontSizeScale = newValue;
+                    rootPane.saveConfig();
+                }
+            }
+        }
+    }
 }

@@ -94,7 +94,9 @@ Item {
         Config.border.rounding = root.borderRounding;
         Config.border.thickness = root.borderThickness;
 
-        Config.save();
+        Config.markDirty("appearance");
+        Config.markDirty("background");
+        Config.markDirty("border");
     }
 
     Component {

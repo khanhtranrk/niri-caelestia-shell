@@ -110,7 +110,7 @@ Item {
             });
         }
         Config.bar.entries = entries;
-        Config.save();
+        Config.markDirty("bar");
     }
 
     ListModel {

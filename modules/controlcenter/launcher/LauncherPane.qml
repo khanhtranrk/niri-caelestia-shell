@@ -74,7 +74,7 @@ Item {
         }
 
         Config.launcher.hiddenApps = hiddenApps;
-        Config.save();
+        Config.markDirty("launcher");
     }
 
     AppDb {
@@ -612,7 +612,7 @@ Item {
                                         }
                                     }
                                     Config.launcher.favouriteApps = favouriteApps;
-                                    Config.save();
+                                    Config.markDirty("launcher");
                                 }
                             }
                         }
@@ -645,7 +645,7 @@ Item {
                                         }
                                     }
                                     Config.launcher.hiddenApps = hiddenApps;
-                                    Config.save();
+                                    Config.markDirty("launcher");
                                 }
                             }
                         }

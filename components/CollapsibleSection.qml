@@ -71,8 +71,7 @@ ColumnLayout {
                 }
 
                 StyledRect {
-                    // color: Colours.palette.m3primary
-                    color: root.expanded ? Colours.palette.m3primary : Colours.palette.m3secondaryContainer
+                    color: "transparent"
 
                     radius: Appearance.rounding.small
 
@@ -89,8 +88,8 @@ ColumnLayout {
                         id: expandIcon
                         anchors.centerIn: parent
                         animate: true
-                        text: root.expanded ? "expand_more" : "keyboard_arrow_right"
-                        color: root.expanded ? Colours.palette.m3onPrimary : Colours.palette.m3onSecondaryContainer
+                        text: root.expanded ? "expand_less" : "expand_more"
+                        color: root.expanded ? Colours.palette.m3primary : Colours.palette.m3onSurfaceVariant
 
                         font.pointSize: Appearance.font.size.titleMedium
                     }
